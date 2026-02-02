@@ -8,6 +8,7 @@ import { useGenerateWorkflow } from "@/controllers/API/queries/copilot/use-gener
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useAlertStore from "@/stores/alertStore";
 import { cn } from "@/utils/utils";
+import { api } from "@/controllers/API/api";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
@@ -113,6 +114,38 @@ export default function CopilotChat({ open, setOpen }: CopilotChatProps) {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Call /save_selected_nodes when copilot opens
+  useEffect(() => {
+    if (open) {
+      handleSaveSelectedNodes();
+    }
+  }, [open]);
+
+  const handleSaveSelectedNodes = async () => {
+    try {
+      // Define the nodes to save
+      // const nodeSelector = {
+      //   aaa_guoyansong: ["Agent", "EditComponentTextOnly"],
+      //   agentql: ["AgentQL"],
+      // };
+
+      const response = await api.post(
+        "/api/v1/save_selected_nodes",
+        {
+          save_path: null, // Use default path
+          filename: "nodes_auto.json",
+        },
+      );
+
+      if (response?.data) {
+        console.log("Nodes saved successfully:", response.data);
+      }
+    } catch (error: any) {
+      console.error("Error saving selected nodes:", error.message);
+      // Don't show error to user, just log it
+    }
+  };
 
   useEffect(() => {
     if (open && messages.length === 0) {

@@ -7,12 +7,12 @@ from lfx.template.utils import update_template_values
 
 
 class PromptComponent(Component):
-    display_name: str = "Prompt Template guoyansong"
+    display_name: str = "Prompt"
     description: str = "Create a prompt template with dynamic variables."
     documentation: str = "https://docs.langflow.org/components-prompts"
     icon = "braces"
     trace_type = "prompt"
-    name = "Prompt Template"
+    name = "Prompt"
     priority = 0  # Set priority to 0 to make it appear first
 
     inputs = [

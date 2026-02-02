@@ -181,21 +181,40 @@ async def session_scope() -> AsyncGenerator[AsyncSession, None]:
             yield session
             await session.commit()
         except Exception as e:
-            await session.rollback()
+            # Always attempt to rollback the session on error
+            try:
+                await session.rollback()
+            except Exception as rollback_exc:  # pragma: no cover - extremely defensive
+                await logger.aerror(f"Failed to rollback session: {rollback_exc!s}")
 
-            # Log at appropriate level based on error type
+            # Log detailed information for debugging
+            import traceback
+            tb = traceback.format_exc()
+            await logger.aerror(f"Exception in session_scope: {e!s}")
+            await logger.adebug(f"Traceback for session_scope exception:\n{tb}")
+
+            # If this is an HTTPException raised intentionally, re-raise it so FastAPI can handle it
             if isinstance(e, HTTPException):
+                # Log at a lower level for client errors
                 if HTTPStatus.BAD_REQUEST.value <= e.status_code < HTTPStatus.INTERNAL_SERVER_ERROR.value:
-                    # Client errors (4xx) - log at info level
                     await logger.ainfo(f"Client error during session scope: {e.status_code}: {e.detail}")
                 else:
-                    # Server errors (5xx) or other - log at error level
-                    await logger.aexception("An error occurred during the session scope.", exception=e)
-            else:
-                # Non-HTTP exceptions - log at error level
-                await logger.aexception("An error occurred during the session scope.", exception=e)
+                    await logger.aexception("An HTTPException occurred during the session scope.", exception=e)
+                raise
 
-            raise
+            # For DB-specific errors, return a clearer HTTP 500 to the client while preserving the original exception as context
+            try:
+                import sqlalchemy as sa
+                if isinstance(e, sa.exc.SQLAlchemyError):
+                    await logger.aexception("Database error occurred during session scope", exception=e)
+                    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Database error during request") from e
+            except Exception:
+                # If sqlalchemy isn't available or checking fails, continue to re-raise original
+                pass
+
+            # Non-HTTP, non-DB exceptions: log fully and re-raise as HTTP 500 with safe message
+            await logger.aexception("An unexpected error occurred during the session scope.", exception=e)
+            raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Internal server error during database session") from e
 
 
 def get_cache_service() -> CacheService | AsyncBaseCacheService:

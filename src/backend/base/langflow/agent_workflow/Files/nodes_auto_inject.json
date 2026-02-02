@@ -1,0 +1,1047 @@
+[
+  {
+    "id": "ChatInput-<Need Edit!>",
+    "data": {
+      "description": "Get chat inputs from the Playground.",
+      "display_name": "Chat Input",
+      "id": "ChatInput-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "ChatInput",
+      "node": {
+        "template": {
+          "input_value": {
+            "display_name": "Input Text",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Message to be passed as input.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "message",
+            "display_name": "Chat Message",
+            "types": [
+              "Message"
+            ],
+            "method": "message_response",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ChatOutput-<Need Edit!>",
+    "data": {
+      "description": "Display a chat message in the Playground.",
+      "display_name": "Chat Output",
+      "id": "ChatOutput-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "ChatOutput",
+      "node": {
+        "template": {
+          "input_value": {
+            "display_name": "Inputs",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Message to be passed as output.",
+            "type": "other",
+            "input_types": [
+              "Data",
+              "DataFrame",
+              "Message"
+            ],
+            "_input_type": "HandleInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "message",
+            "display_name": "Output Message",
+            "types": [
+              "Message"
+            ],
+            "method": "message_response",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Agent-<Need Edit!>",
+    "data": {
+      "description": "Define the agent's instructions, then enter a task to complete using tools.",
+      "display_name": "Agent",
+      "id": "Agent-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "Agent",
+      "node": {
+        "template": {
+          "tools": {
+            "display_name": "Tools",
+            "name": "tools",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "These are the tools that the agent can use to help with tasks.",
+            "type": "other",
+            "input_types": [
+              "Tool"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "agent_llm": {
+            "display_name": "Model Provider",
+            "name": "agent_llm",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The provider of the language model that the agent will use to generate responses.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The OpenAI API Key to use for the OpenAI model.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          },
+          "base_url": {
+            "display_name": "Base URL",
+            "name": "base_url",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The base URL of the API.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "input_value": {
+            "display_name": "Input",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The input provided by the user for the agent to process.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageInput"
+          },
+          "max_output_tokens": {
+            "display_name": "Max Output Tokens",
+            "name": "max_output_tokens",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The maximum number of tokens to generate.",
+            "type": "int",
+            "input_types": [],
+            "_input_type": "IntInput"
+          },
+          "model_name": {
+            "display_name": "Model Name",
+            "name": "model_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "To see the model names, first choose a provider. Then, enter your API key and click the refresh button next to the model name.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "project_id": {
+            "display_name": "Project ID",
+            "name": "project_id",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The project ID of the model.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "system_prompt": {
+            "display_name": "Agent Instructions",
+            "name": "system_prompt",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "System Prompt: Initial instructions and context provided to guide the agent's behavior.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "response",
+            "display_name": "Response",
+            "types": [
+              "Message"
+            ],
+            "method": "message_response",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ALTK Agent-<Need Edit!>",
+    "data": {
+      "description": "Advanced agent with both pre-tool validation and post-tool processing capabilities.",
+      "display_name": "ALTK Agent",
+      "id": "ALTK Agent-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "ALTK Agent",
+      "node": {
+        "template": {
+          "tools": {
+            "display_name": "Tools",
+            "name": "tools",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "These are the tools that the agent can use to help with tasks.",
+            "type": "other",
+            "input_types": [
+              "Tool"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "agent_llm": {
+            "display_name": "Model Provider",
+            "name": "agent_llm",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The provider of the language model that the agent will use to generate responses.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The OpenAI API Key to use for the OpenAI model.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          },
+          "base_url": {
+            "display_name": "Base URL",
+            "name": "base_url",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The base URL of the API.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "enable_post_tool_reflection": {
+            "display_name": "Post Tool JSON Processing",
+            "name": "enable_post_tool_reflection",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Processes tool output through JSON analysis.",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          },
+          "enable_tool_validation": {
+            "display_name": "Tool Validation",
+            "name": "enable_tool_validation",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Validates tool calls using SPARC before execution.",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          },
+          "input_value": {
+            "display_name": "Input",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The input provided by the user for the agent to process.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageInput"
+          },
+          "max_output_tokens": {
+            "display_name": "Max Output Tokens",
+            "name": "max_output_tokens",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The maximum number of tokens to generate.",
+            "type": "int",
+            "input_types": [],
+            "_input_type": "IntInput"
+          },
+          "model_name": {
+            "display_name": "Model Name",
+            "name": "model_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "To see the model names, first choose a provider. Then, enter your API key and click the refresh button next to the model name.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "project_id": {
+            "display_name": "Project ID",
+            "name": "project_id",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The project ID of the model.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "system_prompt": {
+            "display_name": "Agent Instructions",
+            "name": "system_prompt",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "System Prompt: Initial instructions and context provided to guide the agent's behavior.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "response",
+            "display_name": "Response",
+            "types": [
+              "Message"
+            ],
+            "method": "message_response",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Cuga-<Need Edit!>",
+    "data": {
+      "description": "Define the Cuga agent's policies, then assign it a task.",
+      "display_name": "Cuga",
+      "id": "Cuga-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "Cuga",
+      "node": {
+        "template": {
+          "tools": {
+            "display_name": "Tools",
+            "name": "tools",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "These are the tools that the agent can use to help with tasks.",
+            "type": "other",
+            "input_types": [
+              "Tool"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "agent_llm": {
+            "display_name": "Model Provider",
+            "name": "agent_llm",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The provider of the language model that the agent will use to generate responses.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The OpenAI API Key to use for the OpenAI model.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          },
+          "browser_enabled": {
+            "display_name": "Enable Browser",
+            "name": "browser_enabled",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Toggle to enable a built-in browser tool for web scraping and searching.",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          },
+          "input_value": {
+            "display_name": "Input",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The input provided by the user for the agent to process.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageInput"
+          },
+          "lite_mode": {
+            "display_name": "Enable CugaLite",
+            "name": "lite_mode",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Enable CugaLite for simple API tasks (faster execution).",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          },
+          "lite_mode_tool_threshold": {
+            "display_name": "CugaLite Tool Threshold",
+            "name": "lite_mode_tool_threshold",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Route to CugaLite if app has fewer than this many tools.",
+            "type": "int",
+            "input_types": [],
+            "_input_type": "IntInput"
+          },
+          "model_name": {
+            "display_name": "Model Name",
+            "name": "model_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "To see the model names, first choose a provider. Then, enter your API key and click the refresh button next to the model name.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "policies": {
+            "display_name": "Policies",
+            "name": "policies",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Custom instructions or policies for the agent to adhere to during its operation.\nExample:\n## Plan\n< planning instructions e.g. which tools and when to use>\n## Answer\n< final answer instructions how to answer>",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          },
+          "web_apps": {
+            "display_name": "Web applications",
+            "name": "web_apps",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Define a list of web applications that cuga will open when enable browser is true. Currently only supports one web application. Example: https://example.com",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "response",
+            "display_name": "Response",
+            "types": [
+              "Message"
+            ],
+            "method": "message_response",
+            "selected": "Message"
+          },
+          {
+            "name": "structured_response",
+            "display_name": "Structured Response",
+            "types": [
+              "Data"
+            ],
+            "method": "json_response",
+            "selected": "Data"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "EmbeddingModel-<Need Edit!>",
+    "data": {
+      "description": "Generate embeddings using a specified provider.",
+      "display_name": "Embedding Model",
+      "id": "EmbeddingModel-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "EmbeddingModel",
+      "node": {
+        "template": {
+          "api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Model Provider API key",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          },
+          "base_url_ibm_watsonx": {
+            "display_name": "watsonx API Endpoint",
+            "name": "base_url_ibm_watsonx",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The base URL of the API (IBM watsonx.ai only)",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "model": {
+            "display_name": "Model Name",
+            "name": "model",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the embedding model to use",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "ollama_base_url": {
+            "display_name": "Ollama API URL",
+            "name": "ollama_base_url",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Endpoint of the Ollama API (Ollama only). Defaults to http://localhost:11434",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "project_id": {
+            "display_name": "Project ID",
+            "name": "project_id",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "IBM watsonx.ai Project ID (required for IBM watsonx.ai)",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "provider": {
+            "display_name": "Model Provider",
+            "name": "provider",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the embedding model provider",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "embeddings",
+            "display_name": "Embedding Model",
+            "types": [
+              "Embeddings"
+            ],
+            "method": "build_embeddings",
+            "selected": "Embeddings"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "LanguageModelComponent-<Need Edit!>",
+    "data": {
+      "description": "Runs a language model given a specified provider.",
+      "display_name": "Language Model",
+      "id": "LanguageModelComponent-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "LanguageModelComponent",
+      "node": {
+        "template": {
+          "api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Model Provider API key",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          },
+          "base_url_ibm_watsonx": {
+            "display_name": "watsonx API Endpoint",
+            "name": "base_url_ibm_watsonx",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The base URL of the API (IBM watsonx.ai only)",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "input_value": {
+            "display_name": "Input",
+            "name": "input_value",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The input text to send to the model",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageInput"
+          },
+          "model_name": {
+            "display_name": "Model Name",
+            "name": "model_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the model to use",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "ollama_base_url": {
+            "display_name": "Ollama API URL",
+            "name": "ollama_base_url",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Endpoint of the Ollama API (Ollama only). Defaults to http://localhost:11434",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "project_id": {
+            "display_name": "watsonx Project ID",
+            "name": "project_id",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "provider": {
+            "display_name": "Model Provider",
+            "name": "provider",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the model provider",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "system_message": {
+            "display_name": "System Message",
+            "name": "system_message",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "A system message that helps set the behavior of the assistant",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "text_output",
+            "display_name": "Model Response",
+            "types": [
+              "Message"
+            ],
+            "method": "text_response",
+            "selected": "Message"
+          },
+          {
+            "name": "model_output",
+            "display_name": "Language Model",
+            "types": [
+              "LanguageModel"
+            ],
+            "method": "build_model",
+            "selected": "LanguageModel"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "MCPTools-<Need Edit!>",
+    "data": {
+      "description": "Connect to an MCP server to use its tools.",
+      "display_name": "MCP Tools",
+      "id": "MCPTools-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "MCPTools",
+      "node": {
+        "template": {
+          "mcp_server": {
+            "display_name": "MCP Server",
+            "name": "mcp_server",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the MCP Server that will be used by this component",
+            "type": "mcp",
+            "input_types": [],
+            "_input_type": "McpInput"
+          },
+          "tool": {
+            "display_name": "Tool",
+            "name": "tool",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Select the tool to execute",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "tool_placeholder": {
+            "display_name": "Tool Placeholder",
+            "name": "tool_placeholder",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Placeholder for the tool",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "response",
+            "display_name": "Response",
+            "types": [
+              "DataFrame"
+            ],
+            "method": "build_output",
+            "selected": "DataFrame"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Memory-<Need Edit!>",
+    "data": {
+      "description": "Stores or retrieves stored chat messages from Langflow tables or an external memory.",
+      "display_name": "Message History",
+      "id": "Memory-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "Memory",
+      "node": {
+        "template": {
+          "message": {
+            "display_name": "Message",
+            "name": "message",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The chat message to be stored.",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "mode": {
+            "display_name": "Mode",
+            "name": "mode",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Operation mode: Store messages or Retrieve messages.",
+            "type": "tab",
+            "input_types": [],
+            "_input_type": "TabInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "messages_text",
+            "display_name": "Message",
+            "types": [
+              "Message"
+            ],
+            "method": "retrieve_messages_as_text",
+            "selected": "Message"
+          },
+          {
+            "name": "dataframe",
+            "display_name": "Dataframe",
+            "types": [
+              "DataFrame"
+            ],
+            "method": "retrieve_messages_dataframe",
+            "selected": null
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Prompt-<Need Edit!>",
+    "data": {
+      "description": "Create a prompt template with dynamic variables.",
+      "display_name": "Prompt",
+      "id": "Prompt-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "Prompt",
+      "node": {
+        "template": {
+          "template": {
+            "display_name": "Template",
+            "name": "template",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "prompt",
+            "input_types": [],
+            "_input_type": "PromptInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "prompt",
+            "display_name": "Prompt",
+            "types": [
+              "Message"
+            ],
+            "method": "build_prompt",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Chroma-<Need Edit!>",
+    "data": {
+      "description": "Chroma Vector Store with search capabilities",
+      "display_name": "Chroma DB",
+      "id": "Chroma-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "Chroma",
+      "node": {
+        "template": {
+          "embedding": {
+            "display_name": "Embedding",
+            "name": "embedding",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "other",
+            "input_types": [
+              "Embeddings"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "ingest_data": {
+            "display_name": "Ingest Data",
+            "name": "ingest_data",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "other",
+            "input_types": [
+              "Data",
+              "DataFrame"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "collection_name": {
+            "display_name": "Collection Name",
+            "name": "collection_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "persist_directory": {
+            "display_name": "Persist Directory",
+            "name": "persist_directory",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "StrInput"
+          },
+          "search_query": {
+            "display_name": "Search Query",
+            "name": "search_query",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Enter a query to run a similarity search.",
+            "type": "query",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "QueryInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "search_results",
+            "display_name": "Search Results",
+            "types": [
+              "Data"
+            ],
+            "method": "search_documents",
+            "selected": "Data"
+          },
+          {
+            "name": "dataframe",
+            "display_name": "DataFrame",
+            "types": [
+              "DataFrame"
+            ],
+            "method": "as_dataframe",
+            "selected": "DataFrame"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "File-<Need Edit!>",
+    "data": {
+      "description": "Loads content from one or more files.",
+      "display_name": "Read File",
+      "id": "File-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "File",
+      "node": {
+        "template": {
+          "path": {
+            "display_name": "Files",
+            "name": "path",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Supported file extensions: csv, json, pdf, txt, md, mdx, yaml, yml, xml, html, htm, docx, py, sh, sql, js, ts, tsx, adoc, asciidoc, asc, bmp, dotx, dotm, docm, jpg, jpeg, png, potx, ppsx, pptm, potm, ppsm, pptx, tiff, xls, xlsx, xhtml, webp; optionally bundled in file extensions: zip, tar, tgz, bz2, gz",
+            "type": "file",
+            "input_types": [],
+            "_input_type": "FileInput"
+          },
+          "advanced_mode": {
+            "display_name": "Advanced Parser",
+            "name": "advanced_mode",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Enable advanced document processing and export with Docling for PDFs, images, and office documents. Note that advanced document processing can consume significant resources.",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          },
+          "markdown": {
+            "display_name": "Markdown Export",
+            "name": "markdown",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Export processed documents to Markdown format. Only available when advanced mode is enabled.",
+            "type": "bool",
+            "input_types": [],
+            "_input_type": "BoolInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "message",
+            "display_name": "Raw Content",
+            "types": [
+              "Message"
+            ],
+            "method": "load_files_message",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "SplitText-<Need Edit!>",
+    "data": {
+      "description": "Split text into chunks based on specified criteria.",
+      "display_name": "Split Text",
+      "id": "SplitText-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "SplitText",
+      "node": {
+        "template": {
+          "data_inputs": {
+            "display_name": "Input",
+            "name": "data_inputs",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The data with texts to split in chunks.",
+            "type": "other",
+            "input_types": [
+              "Data",
+              "DataFrame",
+              "Message"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "chunk_overlap": {
+            "display_name": "Chunk Overlap",
+            "name": "chunk_overlap",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Number of characters to overlap between chunks.",
+            "type": "int",
+            "input_types": [],
+            "_input_type": "IntInput"
+          },
+          "chunk_size": {
+            "display_name": "Chunk Size",
+            "name": "chunk_size",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The maximum length of each chunk. Text is first split by separator, then chunks are merged up to this size. Individual splits larger than this won't be further divided.",
+            "type": "int",
+            "input_types": [],
+            "_input_type": "IntInput"
+          },
+          "separator": {
+            "display_name": "Separator",
+            "name": "separator",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The character to split on. Use \\n for newline. Examples: \\n\\n for paragraphs, \\n for lines, . for sentences",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "dataframe",
+            "display_name": "Chunks",
+            "types": [
+              "DataFrame"
+            ],
+            "method": "split_text",
+            "selected": "DataFrame"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ParserComponent-<Need Edit!>",
+    "data": {
+      "description": "Extracts text using a template.",
+      "display_name": "Parser",
+      "id": "ParserComponent-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "ParserComponent",
+      "node": {
+        "template": {
+          "input_data": {
+            "display_name": "Data or DataFrame",
+            "name": "input_data",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Accepts either a DataFrame or a Data object.",
+            "type": "other",
+            "input_types": [
+              "DataFrame",
+              "Data"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "mode": {
+            "display_name": "Mode",
+            "name": "mode",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Convert into raw string instead of using a template.",
+            "type": "tab",
+            "input_types": [],
+            "_input_type": "TabInput"
+          },
+          "pattern": {
+            "display_name": "Template",
+            "name": "pattern",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Use variables within curly brackets to extract column values for DataFrames or key values for Data.For example: `Name: {Name}, Age: {Age}, Country: {Country}`",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MultilineInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "parsed_text",
+            "display_name": "Parsed Text",
+            "types": [
+              "Message"
+            ],
+            "method": "parse_combined_text",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  }
+]

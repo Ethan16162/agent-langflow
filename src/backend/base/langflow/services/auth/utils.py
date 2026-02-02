@@ -49,42 +49,50 @@ async def api_key_security(
     settings_service = get_settings_service()
     result: ApiKey | User | None
 
-    async with session_scope() as db:
-        if settings_service.auth_settings.AUTO_LOGIN:
-            # Get the first user
-            if not settings_service.auth_settings.SUPERUSER:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Missing first superuser credentials",
-                )
-            if not query_param and not header_param:
-                if settings_service.auth_settings.skip_auth_auto_login:
-                    result = await get_user_by_username(db, settings_service.auth_settings.SUPERUSER)
-                    logger.warning(AUTO_LOGIN_WARNING)
-                    return UserRead.model_validate(result, from_attributes=True)
+    try:
+        async with session_scope() as db:
+            if settings_service.auth_settings.AUTO_LOGIN:
+                # Get the first user
+                if not settings_service.auth_settings.SUPERUSER:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Missing first superuser credentials",
+                    )
+                if not query_param and not header_param:
+                    if settings_service.auth_settings.skip_auth_auto_login:
+                        result = await get_user_by_username(db, settings_service.auth_settings.SUPERUSER)
+                        logger.warning(AUTO_LOGIN_WARNING)
+                        return UserRead.model_validate(result, from_attributes=True)
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=AUTO_LOGIN_ERROR,
+                    )
+                result = await check_key(db, query_param or header_param)
+
+            elif not query_param and not header_param:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail=AUTO_LOGIN_ERROR,
+                    detail="An API key must be passed as query or header",
                 )
-            result = await check_key(db, query_param or header_param)
 
-        elif not query_param and not header_param:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="An API key must be passed as query or header",
-            )
+            else:
+                result = await check_key(db, query_param or header_param)
 
-        else:
-            result = await check_key(db, query_param or header_param)
+            if not result:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Invalid or missing API key",
+                )
 
-        if not result:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Invalid or missing API key",
-            )
-
-        if isinstance(result, User):
-            return UserRead.model_validate(result, from_attributes=True)
+            if isinstance(result, User):
+                return UserRead.model_validate(result, from_attributes=True)
+    except HTTPException:
+        # Let HTTP exceptions propagate normally
+        raise
+    except Exception as exc:  # pragma: no cover - defensive
+        await logger.aexception("Unexpected error in api_key_security", exception=exc)
+        # Return a safe HTTP error to the caller
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Authentication subsystem error") from exc
 
     msg = "Invalid result type"
     raise ValueError(msg)
