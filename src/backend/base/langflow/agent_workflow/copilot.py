@@ -345,7 +345,7 @@ def format_workflow_json(workflow_data: dict[str, Any]) -> dict[str, Any]:
     # Ensure viewport exists
     if "viewport" not in workflow_data:
         workflow_data["viewport"] = {"x": 0, "y": 0, "zoom": 1}
-    
+
     # import pdb; pdb.set_trace()
 
     data = workflow_data.get("data")
@@ -534,7 +534,6 @@ async def generate_workflow_with_llm(
         messages = build_base_messages()
         # Always include the user's original requirement each attempt
         messages.append(HumanMessage(content=user_message))
-
         # If there was an error in previous attempt, provide details to LLM for correction
         if last_error:
             feedback = (
@@ -542,8 +541,8 @@ async def generate_workflow_with_llm(
                 f"Please correct the output and return only a valid workflow JSON object."
             )
             # Also include last response text for context if available
-            # if last_response_text:
-            #     feedback += f"\nPrevious LLM response was:\n{last_response_text}"
+            if last_response_text:
+                feedback += f"\nPrevious LLM response was:\n{last_response_text}"
             messages.append(HumanMessage(content=feedback))
 
         # =========================== 3. Invoke LLM
@@ -695,7 +694,6 @@ def enrich_workflow_nodes(workflow_data: dict[str, Any]) -> dict[str, Any]:
     Returns:
         dict: 补全后的 workflow_data
     """
-    NODES_JSON_PATH = "/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/nodes.json"
     NODES_JSON_PATH = "/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/Files/nodes_auto.json"
 
     # 加载完整的节点模板

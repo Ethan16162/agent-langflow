@@ -1098,11 +1098,12 @@ async def save_selected_nodes(
     node_selector: dict[str, list[str] | str] = {
         "input_output": ["ChatInput", "ChatOutput"],
         "models_and_agents": "all",  # ["Prompt Template", "LanguageModelComponent", "EmbeddingModelComponent"],
-        # "aaa_guoyansong": "all",
+        "aaa_guoyansong": ["RagPrompt"],
         "chroma": "all",
         "files_and_knowledge": ["File"],
-        "processing": ["SplitText", "ParserComponent"],
-        "openai": ["OpenAIEmbeddings"]
+        "processing": ["SplitText", "parser"],
+        "openai": ["OpenAIEmbeddings"],
+        "datastax": ["AstraDB"],
     }
 
     try:

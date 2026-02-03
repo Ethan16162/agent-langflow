@@ -8,6 +8,7 @@ from lfx.template.field.base import Output
 
 
 class ParserComponent(Component):
+    name = "parser"
     display_name = "Parser"
     description = "Extracts text using a template."
     documentation: str = "https://docs.langflow.org/components-processing#parser"

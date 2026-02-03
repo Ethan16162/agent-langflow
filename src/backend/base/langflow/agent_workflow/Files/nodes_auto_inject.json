@@ -783,6 +783,62 @@
     }
   },
   {
+    "id": "RagPrompt-<Need Edit!>",
+    "data": {
+      "description": "RAG 专用：基于检索上下文与用户问题生成回答的 prompt 模板（context + question -> answer）。",
+      "display_name": "RAG Prompt",
+      "id": "RagPrompt-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "RagPrompt",
+      "node": {
+        "template": {
+          "context": {
+            "display_name": "Context",
+            "name": "context",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "检索得到的上下文，通常接 Parser 或 Vector Store 的输出。",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "question": {
+            "display_name": "Question",
+            "name": "question",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "用户问题，通常接 Chat Input 的 message_response。",
+            "type": "str",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "MessageTextInput"
+          },
+          "template": {
+            "display_name": "Template",
+            "name": "template",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "prompt",
+            "input_types": [],
+            "_input_type": "PromptInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "prompt",
+            "display_name": "Prompt",
+            "types": [
+              "Message"
+            ],
+            "method": "build_prompt",
+            "selected": "Message"
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "Chroma-<Need Edit!>",
     "data": {
       "description": "Chroma Vector Store with search capabilities",
@@ -988,13 +1044,13 @@
     }
   },
   {
-    "id": "ParserComponent-<Need Edit!>",
+    "id": "parser-<Need Edit!>",
     "data": {
       "description": "Extracts text using a template.",
       "display_name": "Parser",
-      "id": "ParserComponent-<Need Edit!>",
+      "id": "parser-<Need Edit!>",
       "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
-      "type": "ParserComponent",
+      "type": "parser",
       "node": {
         "template": {
           "input_data": {
@@ -1082,6 +1138,130 @@
             ],
             "method": "build_embeddings",
             "selected": "Embeddings"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "AstraDB-<Need Edit!>",
+    "data": {
+      "description": "Ingest and search documents in Astra DB",
+      "display_name": "Astra DB",
+      "id": "AstraDB-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "AstraDB",
+      "node": {
+        "template": {
+          "embedding_model": {
+            "display_name": "Embedding Model",
+            "name": "embedding_model",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Specify the Embedding Model. Not required for Astra Vectorize collections.",
+            "type": "other",
+            "input_types": [
+              "Embeddings"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "ingest_data": {
+            "display_name": "Ingest Data",
+            "name": "ingest_data",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "other",
+            "input_types": [
+              "Data",
+              "DataFrame"
+            ],
+            "_input_type": "HandleInput"
+          },
+          "collection_name": {
+            "display_name": "Collection",
+            "name": "collection_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The name of the collection within Astra DB where the vectors will be stored.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "database_name": {
+            "display_name": "Database",
+            "name": "database_name",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "The Database name for the Astra DB instance.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "lexical_terms": {
+            "display_name": "Lexical Terms",
+            "name": "lexical_terms",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Add additional terms/keywords to augment search precision.",
+            "type": "query",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "QueryInput"
+          },
+          "reranker": {
+            "display_name": "Reranker",
+            "name": "reranker",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Post-retrieval model that re-scores results for optimal relevance ranking.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "search_query": {
+            "display_name": "Search Query",
+            "name": "search_query",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Enter a query to run a similarity search.",
+            "type": "query",
+            "input_types": [
+              "Message"
+            ],
+            "_input_type": "QueryInput"
+          },
+          "token": {
+            "display_name": "Astra DB Application Token",
+            "name": "token",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "Authentication token for accessing Astra DB.",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "search_results",
+            "display_name": "Search Results",
+            "types": [
+              "Data"
+            ],
+            "method": "search_documents",
+            "selected": "Data"
+          },
+          {
+            "name": "dataframe",
+            "display_name": "DataFrame",
+            "types": [
+              "DataFrame"
+            ],
+            "method": "as_dataframe",
+            "selected": "DataFrame"
+          },
+          {
+            "name": "vectorstoreconnection",
+            "display_name": "Vector Store Connection",
+            "types": [
+              "VectorStore"
+            ],
+            "method": "as_vector_store",
+            "selected": "VectorStore"
           }
         ]
       }

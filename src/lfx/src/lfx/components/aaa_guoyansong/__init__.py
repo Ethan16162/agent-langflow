@@ -10,6 +10,8 @@ from .chroma_agent import ChromaVectorStoreComponentAgent
 from .Edit import EditComponent
 from .hello import HelloComponent
 from .parser2 import ParserComponent2
+from .prompt import RagPromptComponent
+
 
 _dynamic_imports = {
     "ChromaVectorStoreComponent": "chroma",
@@ -25,6 +27,7 @@ __all__ = [
     "HelloComponent",
     "ParserComponent1",
     "ParserComponent2",
+    "RagPromptComponent",
 ]
 
 

@@ -374,7 +374,7 @@ edges 数组中每个边需包含：
           },
           "targetHandle": {
             "fieldName": "question",
-            "id": "Prompt-P0p5K",
+            "id": "RagPrompt-P0p5K",
             "inputTypes": [
               "Message",
               "Text"
@@ -395,7 +395,7 @@ edges 数组中每个边需包含：
           },
           "targetHandle": {
             "fieldName": "context",
-            "id": "Prompt-P0p5K",
+            "id": "RagPrompt-P0p5K",
             "inputTypes": [
               "Message",
               "Text"
@@ -430,7 +430,7 @@ edges 数组中每个边需包含：
         "data": {
           "sourceHandle": {
             "dataType": "Prompt",
-            "id": "Prompt-P0p5K",
+            "id": "RagPrompt-P0p5K",
             "name": "prompt",
             "output_types": [
               "Message"
@@ -608,8 +608,8 @@ edges 数组中每个边需包含：
         "data": {
           "description": "Create a prompt template with dynamic variables.",
           "display_name": "Prompt",
-          "id": "Prompt-P0p5K",
-          "node": {            
+          "id": "RagPrompt-P0p5K",
+          "node": {
             "outputs": [
               {
                 "allows_loop": false,
@@ -630,46 +630,20 @@ edges 数组中每个边需包含：
               "context": {
                 "display_name": "context",
                 "field_type": "str",
-                "fileTypes": [],
-                "file_path": "",
                 "info": "",
                 "input_types": [
                   "Message",
                   "Text"
                 ],
-                "list": false,
-                "load_from_db": false,
-                "multiline": true,
                 "name": "context",
-                "placeholder": "",
-                "required": false,
-                "show": true,
-                "title_case": false,
-                "type": "str",
-                "value": ""
               },
               "question": {
-                "advanced": false,
                 "display_name": "question",
-                "dynamic": false,
-                "field_type": "str",
-                "fileTypes": [],
-                "file_path": "",
-                "info": "",
                 "input_types": [
                   "Message",
                   "Text"
                 ],
-                "list": false,
-                "load_from_db": false,
-                "multiline": true,
                 "name": "question",
-                "placeholder": "",
-                "required": false,
-                "show": true,
-                "title_case": false,
-                "type": "str",
-                "value": ""
               },
               "template": {
                 "display_name": "Template",
@@ -682,7 +656,7 @@ edges 数组中每个边需包含：
             }
           },
           "selected_output": "prompt",
-          "type": "Prompt"
+          "type": "RagPrompt",
         }
       },
       {
@@ -704,7 +678,7 @@ edges 数组中每个边需包含：
                 "value": "__UNDEFINED__"
               }
             ],
-            "template": {            
+            "template": {
               "chunk_overlap": {
                 "display_name": "Chunk Overlap",
                 "info": "Number of characters to overlap between chunks.",
@@ -959,7 +933,7 @@ edges 数组中每个边需包含：
               "markdown": {
                 "_input_type": "BoolInput",
                 "display_name": "Markdown Export",
-                "info": "Export processed documents to Markdown format. Only available when advanced mode is enabled.",              
+                "info": "Export processed documents to Markdown format. Only available when advanced mode is enabled.",
                 "type": "bool",
                 "value": false
               }
@@ -1287,9 +1261,6 @@ edges 数组中每个边需包含：
                 "input_types": [
                   "Message"
                 ],
-                "list": false,
-                "list_add_label": "Add More",
-                "load_from_db": false,
                 "name": "search_query",
                 "placeholder": "Enter a query...",
                 "required": false,
@@ -1314,33 +1285,6 @@ edges 数组中每个边需包含：
           "type": "AstraDB"
         }
       },
-      {
-        "data": {
-          "id": "Prompt-cOnwa",
-          "node": {
-            "outputs": [
-              {
-                "display_name": "Prompt",
-                "selected": "Message",
-                "types": [
-                  "Message"
-                ],
-                "value": "__UNDEFINED__"
-              }
-            ],
-            "template": {
-              "template": {
-                "_input_type": "PromptInput",
-                "display_name": "Template",
-                "name": "template",
-                "type": "prompt",
-                "value": ""
-              },
-            },
-          },
-          "type": "Prompt"
-        }
-      }
     ],
     "viewport": {
       "x": -325.9549572321506,

@@ -4368,6 +4368,183 @@
       }
     },
     {
+      "id": "RagPrompt-<Need Edit!>",
+      "data": {
+        "description": "RAG 专用：基于检索上下文与用户问题生成回答的 prompt 模板（context + question -> answer）。",
+        "display_name": "RAG Prompt",
+        "id": "RagPrompt-<Need Edit!>",
+        "node": {
+          "template": {
+            "_type": "Component",
+            "code": {
+              "type": "code",
+              "required": true,
+              "placeholder": "",
+              "list": false,
+              "show": true,
+              "multiline": true,
+              "value": "from textwrap import dedent\n\nfrom lfx.base.prompts.api_utils import process_prompt_template\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.inputs.inputs import DefaultPromptField\nfrom lfx.io import HandleInput, MessageTextInput, Output, PromptInput\nfrom lfx.schema.message import Message\nfrom lfx.template.utils import update_template_values\n\n# RAG 默认模板：与 starter_projects/vector_store_rag.py 中包装后的 prompt 一致\n# 模板变量 {context} 接检索结果，{question} 接用户问题\nRAG_DEFAULT_TEMPLATE = dedent(\"\"\"\\\n    Given the following context, answer the question.\n    Context:{context}\n\n    Question: {question}\n    Answer:\"\"\")\n\n\nclass RagPromptComponent(Component):\n    display_name: str = \"RAG Prompt\"\n    description: str = \"RAG 专用：基于检索上下文与用户问题生成回答的 prompt 模板（context + question -> answer）。\"\n    documentation: str = \"https://docs.langflow.org/components-prompts\"\n    icon = \"braces\"\n    trace_type = \"prompt\"\n    name = \"RagPrompt\"\n    priority = 0  # Set priority to 0 to make it appear first\n\n    inputs = [\n        PromptInput(\n            name=\"template\",\n            display_name=\"Template\",\n            value=RAG_DEFAULT_TEMPLATE,\n        ),\n        MessageTextInput(\n            name=\"context\",\n            display_name=\"Context\",\n            input_types=[\"Message\"],\n            required=True,\n            info=\"检索得到的上下文，通常接 Parser 或 Vector Store 的输出。\",\n        ),\n        MessageTextInput(\n            name=\"question\",\n            display_name=\"Question\",\n            input_types=[\"Message\"],\n            required=True,\n            info=\"用户问题，通常接 Chat Input 的 message_response。\",\n        ),\n        MessageTextInput(\n            name=\"tool_placeholder\",\n            display_name=\"Tool Placeholder\",\n            tool_mode=True,\n            advanced=True,\n            info=\"A placeholder input for tool mode.\",\n        ),\n    ]\n\n    outputs = [\n        Output(display_name=\"Prompt\", name=\"prompt\", method=\"build_prompt\"),\n    ]\n\n    async def build_prompt(self) -> Message:\n        template = self._attributes.get(\"template\") or RAG_DEFAULT_TEMPLATE\n        variables = {}\n        for key, val in self._attributes.items():\n            if key == \"template\":\n                continue\n            if isinstance(val, Message):\n                variables[key] = val.text\n            elif val is None:\n                variables[key] = \"\"\n            else:\n                variables[key] = val\n        prompt = Message.from_template(template=template, **variables)\n        self.status = prompt.text\n        return prompt\n\n    def _update_template(self, frontend_node: dict):\n        prompt_template = frontend_node[\"template\"][\"template\"][\"value\"]\n        custom_fields = frontend_node[\"custom_fields\"]\n        frontend_node_template = frontend_node[\"template\"]\n        _ = process_prompt_template(\n            template=prompt_template,\n            name=\"template\",\n            custom_fields=custom_fields,\n            frontend_node_template=frontend_node_template,\n        )\n        return frontend_node\n\n    async def update_frontend_node(self, new_frontend_node: dict, current_frontend_node: dict):\n        \"\"\"This function is called after the code validation is done.\"\"\"\n        frontend_node = await super().update_frontend_node(new_frontend_node, current_frontend_node)\n        template = frontend_node[\"template\"][\"template\"][\"value\"]\n        # Kept it duplicated for backwards compatibility\n        _ = process_prompt_template(\n            template=template,\n            name=\"template\",\n            custom_fields=frontend_node[\"custom_fields\"],\n            frontend_node_template=frontend_node[\"template\"],\n        )\n        # Now that template is updated, we need to grab any values that were set in the current_frontend_node\n        # and update the frontend_node with those values\n        update_template_values(new_template=frontend_node, previous_template=current_frontend_node[\"template\"])\n        return frontend_node\n\n    def _get_fallback_input(self, **kwargs):\n        return DefaultPromptField(**kwargs)\n",
+              "fileTypes": [],
+              "file_path": "",
+              "password": false,
+              "name": "code",
+              "advanced": true,
+              "dynamic": true,
+              "info": "",
+              "load_from_db": false,
+              "title_case": false
+            },
+            "context": {
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": true,
+              "placeholder": "",
+              "show": true,
+              "name": "context",
+              "value": "",
+              "display_name": "Context",
+              "advanced": false,
+              "input_types": [
+                "Message"
+              ],
+              "dynamic": false,
+              "info": "检索得到的上下文，通常接 Parser 或 Vector Store 的输出。",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "_input_type": "MessageTextInput"
+            },
+            "question": {
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": true,
+              "placeholder": "",
+              "show": true,
+              "name": "question",
+              "value": "",
+              "display_name": "Question",
+              "advanced": false,
+              "input_types": [
+                "Message"
+              ],
+              "dynamic": false,
+              "info": "用户问题，通常接 Chat Input 的 message_response。",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "_input_type": "MessageTextInput"
+            },
+            "template": {
+              "tool_mode": false,
+              "trace_as_input": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "template",
+              "value": "Given the following context, answer the question.\nContext:{context}\n\nQuestion: {question}\nAnswer:",
+              "display_name": "Template",
+              "advanced": false,
+              "dynamic": false,
+              "info": "",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "prompt",
+              "_input_type": "PromptInput"
+            },
+            "tool_placeholder": {
+              "tool_mode": true,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "tool_placeholder",
+              "value": "",
+              "display_name": "Tool Placeholder",
+              "advanced": true,
+              "input_types": [
+                "Message"
+              ],
+              "dynamic": false,
+              "info": "A placeholder input for tool mode.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "_input_type": "MessageTextInput"
+            }
+          },
+          "description": "RAG 专用：基于检索上下文与用户问题生成回答的 prompt 模板（context + question -> answer）。",
+          "icon": "braces",
+          "base_classes": [
+            "Message"
+          ],
+          "display_name": "RAG Prompt",
+          "priority": 0,
+          "documentation": "https://docs.langflow.org/components-prompts",
+          "minimized": false,
+          "custom_fields": {},
+          "output_types": [],
+          "pinned": false,
+          "conditional_paths": [],
+          "frozen": false,
+          "outputs": [
+            {
+              "types": [
+                "Message"
+              ],
+              "selected": "Message",
+              "name": "prompt",
+              "display_name": "Prompt",
+              "method": "build_prompt",
+              "value": "__UNDEFINED__",
+              "cache": true,
+              "allows_loop": false,
+              "group_outputs": false,
+              "tool_mode": true
+            }
+          ],
+          "field_order": [
+            "template",
+            "context",
+            "question",
+            "tool_placeholder"
+          ],
+          "beta": false,
+          "legacy": false,
+          "edited": false,
+          "metadata": {
+            "module": "lfx.components.aaa_guoyansong.prompt.RagPromptComponent",
+            "code_hash": "1ffb1316378a",
+            "dependencies": {
+              "total_dependencies": 1,
+              "dependencies": [
+                {
+                  "name": "lfx",
+                  "version": null
+                }
+              ]
+            }
+          },
+          "tool_mode": false
+        },
+        "selected_output": "<Need Edit!> (选择性填写\"outputs\"中列表元素的\"name\"字段)",
+        "type": "RagPrompt"
+      }
+    },
+    {
       "id": "Chroma-<Need Edit!>",
       "data": {
         "description": "Chroma Vector Store with search capabilities",
@@ -5506,11 +5683,11 @@
       }
     },
     {
-      "id": "ParserComponent-<Need Edit!>",
+      "id": "parser-<Need Edit!>",
       "data": {
         "description": "Extracts text using a template.",
         "display_name": "Parser",
-        "id": "ParserComponent-<Need Edit!>",
+        "id": "parser-<Need Edit!>",
         "node": {
           "template": {
             "_type": "Component",
@@ -5543,7 +5720,7 @@
               "list": false,
               "show": true,
               "multiline": true,
-              "value": "from lfx.custom.custom_component.component import Component\nfrom lfx.helpers.data import safe_convert\nfrom lfx.inputs.inputs import BoolInput, HandleInput, MessageTextInput, MultilineInput, TabInput\nfrom lfx.schema.data import Data\nfrom lfx.schema.dataframe import DataFrame\nfrom lfx.schema.message import Message\nfrom lfx.template.field.base import Output\n\n\nclass ParserComponent(Component):\n    display_name = \"Parser\"\n    description = \"Extracts text using a template.\"\n    documentation: str = \"https://docs.langflow.org/components-processing#parser\"\n    icon = \"braces\"\n\n    inputs = [\n        HandleInput(\n            name=\"input_data\",\n            display_name=\"Data or DataFrame\",\n            input_types=[\"DataFrame\", \"Data\"],\n            info=\"Accepts either a DataFrame or a Data object.\",\n            required=True,\n        ),\n        TabInput(\n            name=\"mode\",\n            display_name=\"Mode\",\n            options=[\"Parser\", \"Stringify\"],\n            value=\"Parser\",\n            info=\"Convert into raw string instead of using a template.\",\n            real_time_refresh=True,\n        ),\n        MultilineInput(\n            name=\"pattern\",\n            display_name=\"Template\",\n            info=(\n                \"Use variables within curly brackets to extract column values for DataFrames \"\n                \"or key values for Data.\"\n                \"For example: `Name: {Name}, Age: {Age}, Country: {Country}`\"\n            ),\n            value=\"Text: {text}\",  # Example default\n            dynamic=True,\n            show=True,\n            required=True,\n        ),\n        MessageTextInput(\n            name=\"sep\",\n            display_name=\"Separator\",\n            advanced=True,\n            value=\"\\n\",\n            info=\"String used to separate rows/items.\",\n        ),\n    ]\n\n    outputs = [\n        Output(\n            display_name=\"Parsed Text\",\n            name=\"parsed_text\",\n            info=\"Formatted text output.\",\n            method=\"parse_combined_text\",\n        ),\n    ]\n\n    def update_build_config(self, build_config, field_value, field_name=None):\n        \"\"\"Dynamically hide/show `template` and enforce requirement based on `stringify`.\"\"\"\n        if field_name == \"mode\":\n            build_config[\"pattern\"][\"show\"] = self.mode == \"Parser\"\n            build_config[\"pattern\"][\"required\"] = self.mode == \"Parser\"\n            if field_value:\n                clean_data = BoolInput(\n                    name=\"clean_data\",\n                    display_name=\"Clean Data\",\n                    info=(\n                        \"Enable to clean the data by removing empty rows and lines \"\n                        \"in each cell of the DataFrame/ Data object.\"\n                    ),\n                    value=True,\n                    advanced=True,\n                    required=False,\n                )\n                build_config[\"clean_data\"] = clean_data.to_dict()\n            else:\n                build_config.pop(\"clean_data\", None)\n\n        return build_config\n\n    def _clean_args(self):\n        \"\"\"Prepare arguments based on input type.\"\"\"\n        input_data = self.input_data\n\n        match input_data:\n            case list() if all(isinstance(item, Data) for item in input_data):\n                msg = \"List of Data objects is not supported.\"\n                raise ValueError(msg)\n            case DataFrame():\n                return input_data, None\n            case Data():\n                return None, input_data\n            case dict() if \"data\" in input_data:\n                try:\n                    if \"columns\" in input_data:  # Likely a DataFrame\n                        return DataFrame.from_dict(input_data), None\n                    # Likely a Data object\n                    return None, Data(**input_data)\n                except (TypeError, ValueError, KeyError) as e:\n                    msg = f\"Invalid structured input provided: {e!s}\"\n                    raise ValueError(msg) from e\n            case _:\n                msg = f\"Unsupported input type: {type(input_data)}. Expected DataFrame or Data.\"\n                raise ValueError(msg)\n\n    def parse_combined_text(self) -> Message:\n        \"\"\"Parse all rows/items into a single text or convert input to string if `stringify` is enabled.\"\"\"\n        # Early return for stringify option\n        if self.mode == \"Stringify\":\n            return self.convert_to_string()\n\n        df, data = self._clean_args()\n\n        lines = []\n        if df is not None:\n            for _, row in df.iterrows():\n                formatted_text = self.pattern.format(**row.to_dict())\n                lines.append(formatted_text)\n        elif data is not None:\n            # Use format_map with a dict that returns default_value for missing keys\n            class DefaultDict(dict):\n                def __missing__(self, key):\n                    return data.default_value or \"\"\n\n            formatted_text = self.pattern.format_map(DefaultDict(data.data))\n            lines.append(formatted_text)\n\n        combined_text = self.sep.join(lines)\n        self.status = combined_text\n        return Message(text=combined_text)\n\n    def convert_to_string(self) -> Message:\n        \"\"\"Convert input data to string with proper error handling.\"\"\"\n        result = \"\"\n        if isinstance(self.input_data, list):\n            result = \"\\n\".join([safe_convert(item, clean_data=self.clean_data or False) for item in self.input_data])\n        else:\n            result = safe_convert(self.input_data or False)\n        self.log(f\"Converted to string with length: {len(result)}\")\n\n        message = Message(text=result)\n        self.status = message\n        return message\n",
+              "value": "from lfx.custom.custom_component.component import Component\nfrom lfx.helpers.data import safe_convert\nfrom lfx.inputs.inputs import BoolInput, HandleInput, MessageTextInput, MultilineInput, TabInput\nfrom lfx.schema.data import Data\nfrom lfx.schema.dataframe import DataFrame\nfrom lfx.schema.message import Message\nfrom lfx.template.field.base import Output\n\n\nclass ParserComponent(Component):\n    name = \"parser\"\n    display_name = \"Parser\"\n    description = \"Extracts text using a template.\"\n    documentation: str = \"https://docs.langflow.org/components-processing#parser\"\n    icon = \"braces\"\n\n    inputs = [\n        HandleInput(\n            name=\"input_data\",\n            display_name=\"Data or DataFrame\",\n            input_types=[\"DataFrame\", \"Data\"],\n            info=\"Accepts either a DataFrame or a Data object.\",\n            required=True,\n        ),\n        TabInput(\n            name=\"mode\",\n            display_name=\"Mode\",\n            options=[\"Parser\", \"Stringify\"],\n            value=\"Parser\",\n            info=\"Convert into raw string instead of using a template.\",\n            real_time_refresh=True,\n        ),\n        MultilineInput(\n            name=\"pattern\",\n            display_name=\"Template\",\n            info=(\n                \"Use variables within curly brackets to extract column values for DataFrames \"\n                \"or key values for Data.\"\n                \"For example: `Name: {Name}, Age: {Age}, Country: {Country}`\"\n            ),\n            value=\"Text: {text}\",  # Example default\n            dynamic=True,\n            show=True,\n            required=True,\n        ),\n        MessageTextInput(\n            name=\"sep\",\n            display_name=\"Separator\",\n            advanced=True,\n            value=\"\\n\",\n            info=\"String used to separate rows/items.\",\n        ),\n    ]\n\n    outputs = [\n        Output(\n            display_name=\"Parsed Text\",\n            name=\"parsed_text\",\n            info=\"Formatted text output.\",\n            method=\"parse_combined_text\",\n        ),\n    ]\n\n    def update_build_config(self, build_config, field_value, field_name=None):\n        \"\"\"Dynamically hide/show `template` and enforce requirement based on `stringify`.\"\"\"\n        if field_name == \"mode\":\n            build_config[\"pattern\"][\"show\"] = self.mode == \"Parser\"\n            build_config[\"pattern\"][\"required\"] = self.mode == \"Parser\"\n            if field_value:\n                clean_data = BoolInput(\n                    name=\"clean_data\",\n                    display_name=\"Clean Data\",\n                    info=(\n                        \"Enable to clean the data by removing empty rows and lines \"\n                        \"in each cell of the DataFrame/ Data object.\"\n                    ),\n                    value=True,\n                    advanced=True,\n                    required=False,\n                )\n                build_config[\"clean_data\"] = clean_data.to_dict()\n            else:\n                build_config.pop(\"clean_data\", None)\n\n        return build_config\n\n    def _clean_args(self):\n        \"\"\"Prepare arguments based on input type.\"\"\"\n        input_data = self.input_data\n\n        match input_data:\n            case list() if all(isinstance(item, Data) for item in input_data):\n                msg = \"List of Data objects is not supported.\"\n                raise ValueError(msg)\n            case DataFrame():\n                return input_data, None\n            case Data():\n                return None, input_data\n            case dict() if \"data\" in input_data:\n                try:\n                    if \"columns\" in input_data:  # Likely a DataFrame\n                        return DataFrame.from_dict(input_data), None\n                    # Likely a Data object\n                    return None, Data(**input_data)\n                except (TypeError, ValueError, KeyError) as e:\n                    msg = f\"Invalid structured input provided: {e!s}\"\n                    raise ValueError(msg) from e\n            case _:\n                msg = f\"Unsupported input type: {type(input_data)}. Expected DataFrame or Data.\"\n                raise ValueError(msg)\n\n    def parse_combined_text(self) -> Message:\n        \"\"\"Parse all rows/items into a single text or convert input to string if `stringify` is enabled.\"\"\"\n        # Early return for stringify option\n        if self.mode == \"Stringify\":\n            return self.convert_to_string()\n\n        df, data = self._clean_args()\n\n        lines = []\n        if df is not None:\n            for _, row in df.iterrows():\n                formatted_text = self.pattern.format(**row.to_dict())\n                lines.append(formatted_text)\n        elif data is not None:\n            # Use format_map with a dict that returns default_value for missing keys\n            class DefaultDict(dict):\n                def __missing__(self, key):\n                    return data.default_value or \"\"\n\n            formatted_text = self.pattern.format_map(DefaultDict(data.data))\n            lines.append(formatted_text)\n\n        combined_text = self.sep.join(lines)\n        self.status = combined_text\n        return Message(text=combined_text)\n\n    def convert_to_string(self) -> Message:\n        \"\"\"Convert input data to string with proper error handling.\"\"\"\n        result = \"\"\n        if isinstance(self.input_data, list):\n            result = \"\\n\".join([safe_convert(item, clean_data=self.clean_data or False) for item in self.input_data])\n        else:\n            result = safe_convert(self.input_data or False)\n        self.log(f\"Converted to string with length: {len(result)}\")\n\n        message = Message(text=result)\n        self.status = message\n        return message\n",
               "fileTypes": [],
               "file_path": "",
               "password": false,
@@ -5667,7 +5844,7 @@
           "edited": false,
           "metadata": {
             "module": "lfx.components.processing.parser.ParserComponent",
-            "code_hash": "17514953c7e8",
+            "code_hash": "3f5043c2388c",
             "dependencies": {
               "total_dependencies": 1,
               "dependencies": [
@@ -5681,7 +5858,7 @@
           "tool_mode": false
         },
         "selected_output": "<Need Edit!> (选择性填写\"outputs\"中列表元素的\"name\"字段)",
-        "type": "ParserComponent"
+        "type": "parser"
       }
     },
     {
@@ -6234,6 +6411,838 @@
         },
         "selected_output": "<Need Edit!> (选择性填写\"outputs\"中列表元素的\"name\"字段)",
         "type": "OpenAIEmbeddings"
+      }
+    },
+    {
+      "id": "AstraDB-<Need Edit!>",
+      "data": {
+        "description": "Ingest and search documents in Astra DB",
+        "display_name": "Astra DB",
+        "id": "AstraDB-<Need Edit!>",
+        "node": {
+          "template": {
+            "_type": "Component",
+            "embedding_model": {
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "embedding_model",
+              "value": "",
+              "display_name": "Embedding Model",
+              "advanced": false,
+              "input_types": [
+                "Embeddings"
+              ],
+              "dynamic": false,
+              "info": "Specify the Embedding Model. Not required for Astra Vectorize collections.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "other",
+              "_input_type": "HandleInput"
+            },
+            "ingest_data": {
+              "trace_as_metadata": true,
+              "list": true,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "ingest_data",
+              "value": "",
+              "display_name": "Ingest Data",
+              "advanced": false,
+              "input_types": [
+                "Data",
+                "DataFrame"
+              ],
+              "dynamic": false,
+              "info": "",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "other",
+              "_input_type": "HandleInput"
+            },
+            "advanced_search_filter": {
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "advanced_search_filter",
+              "value": {},
+              "display_name": "Search Metadata Filter",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Optional dictionary of filters to apply to the search query.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "NestedDict",
+              "_input_type": "NestedDictInput"
+            },
+            "api_endpoint": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [],
+              "options_metadata": [],
+              "combobox": false,
+              "dialog_inputs": {},
+              "toggle": false,
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "api_endpoint",
+              "value": "",
+              "display_name": "Astra DB API Endpoint",
+              "advanced": true,
+              "dynamic": false,
+              "info": "The API Endpoint for the Astra DB instance. Supercedes database selection.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "astradb_vectorstore_kwargs": {
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "astradb_vectorstore_kwargs",
+              "value": {},
+              "display_name": "AstraDBVectorStore Parameters",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Optional dictionary of additional parameters for the AstraDBVectorStore.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "NestedDict",
+              "_input_type": "NestedDictInput"
+            },
+            "autodetect_collection": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "autodetect_collection",
+              "value": true,
+              "display_name": "Autodetect Collection",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Boolean flag to determine whether to autodetect the collection.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "_input_type": "BoolInput"
+            },
+            "code": {
+              "type": "code",
+              "required": true,
+              "placeholder": "",
+              "list": false,
+              "show": true,
+              "multiline": true,
+              "value": "from astrapy import DataAPIClient\nfrom langchain_core.documents import Document\n\nfrom lfx.base.datastax.astradb_base import AstraDBBaseComponent\nfrom lfx.base.vectorstores.model import LCVectorStoreComponent, check_cached_vector_store\nfrom lfx.base.vectorstores.vector_store_connection_decorator import vector_store_connection\nfrom lfx.helpers.data import docs_to_data\nfrom lfx.io import BoolInput, DropdownInput, FloatInput, HandleInput, IntInput, NestedDictInput, QueryInput, StrInput\nfrom lfx.schema.data import Data\nfrom lfx.serialization import serialize\nfrom lfx.utils.version import get_version_info\n\n\n@vector_store_connection\nclass AstraDBVectorStoreComponent(AstraDBBaseComponent, LCVectorStoreComponent):\n    display_name: str = \"Astra DB\"\n    description: str = \"Ingest and search documents in Astra DB\"\n    documentation: str = \"https://docs.langflow.org/bundles-datastax#astra-db\"\n    name = \"AstraDB\"\n    icon: str = \"AstraDB\"\n\n    inputs = [\n        *AstraDBBaseComponent.inputs,\n        *LCVectorStoreComponent.inputs,\n        HandleInput(\n            name=\"embedding_model\",\n            display_name=\"Embedding Model\",\n            input_types=[\"Embeddings\"],\n            info=\"Specify the Embedding Model. Not required for Astra Vectorize collections.\",\n            required=False,\n            show=True,\n        ),\n        StrInput(\n            name=\"content_field\",\n            display_name=\"Content Field\",\n            info=\"Field to use as the text content field for the vector store.\",\n            advanced=True,\n        ),\n        StrInput(\n            name=\"deletion_field\",\n            display_name=\"Deletion Based On Field\",\n            info=\"When this parameter is provided, documents in the target collection with \"\n            \"metadata field values matching the input metadata field value will be deleted \"\n            \"before new data is loaded.\",\n            advanced=True,\n        ),\n        BoolInput(\n            name=\"ignore_invalid_documents\",\n            display_name=\"Ignore Invalid Documents\",\n            info=\"Boolean flag to determine whether to ignore invalid documents at runtime.\",\n            advanced=True,\n        ),\n        NestedDictInput(\n            name=\"astradb_vectorstore_kwargs\",\n            display_name=\"AstraDBVectorStore Parameters\",\n            info=\"Optional dictionary of additional parameters for the AstraDBVectorStore.\",\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"search_method\",\n            display_name=\"Search Method\",\n            info=(\n                \"Determine how your content is matched: Vector finds semantic similarity, \"\n                \"and Hybrid Search (suggested) combines both approaches \"\n                \"with a reranker.\"\n            ),\n            options=[\"Hybrid Search\", \"Vector Search\"],  # TODO: Restore Lexical Search?\n            options_metadata=[{\"icon\": \"SearchHybrid\"}, {\"icon\": \"SearchVector\"}],\n            value=\"Vector Search\",\n            advanced=True,\n            real_time_refresh=True,\n        ),\n        DropdownInput(\n            name=\"reranker\",\n            display_name=\"Reranker\",\n            info=\"Post-retrieval model that re-scores results for optimal relevance ranking.\",\n            show=False,\n            toggle=True,\n        ),\n        QueryInput(\n            name=\"lexical_terms\",\n            display_name=\"Lexical Terms\",\n            info=\"Add additional terms/keywords to augment search precision.\",\n            placeholder=\"Enter terms to search...\",\n            separator=\" \",\n            show=False,\n            value=\"\",\n        ),\n        IntInput(\n            name=\"number_of_results\",\n            display_name=\"Number of Search Results\",\n            info=\"Number of search results to return.\",\n            advanced=True,\n            value=4,\n        ),\n        DropdownInput(\n            name=\"search_type\",\n            display_name=\"Search Type\",\n            info=\"Search type to use\",\n            options=[\"Similarity\", \"Similarity with score threshold\", \"MMR (Max Marginal Relevance)\"],\n            value=\"Similarity\",\n            advanced=True,\n        ),\n        FloatInput(\n            name=\"search_score_threshold\",\n            display_name=\"Search Score Threshold\",\n            info=\"Minimum similarity score threshold for search results. \"\n            \"(when using 'Similarity with score threshold')\",\n            value=0,\n            advanced=True,\n        ),\n        NestedDictInput(\n            name=\"advanced_search_filter\",\n            display_name=\"Search Metadata Filter\",\n            info=\"Optional dictionary of filters to apply to the search query.\",\n            advanced=True,\n        ),\n    ]\n\n    async def update_build_config(\n        self,\n        build_config: dict,\n        field_value: str | dict,\n        field_name: str | None = None,\n    ) -> dict:\n        \"\"\"Update build configuration with proper handling of embedding and search options.\"\"\"\n        # Handle base astra db build config updates\n        build_config = await super().update_build_config(\n            build_config,\n            field_value=field_value,\n            field_name=field_name,\n        )\n\n        # Set embedding model display based on provider selection\n        if isinstance(field_value, dict) and \"02_embedding_generation_provider\" in field_value:\n            embedding_provider = field_value.get(\"02_embedding_generation_provider\")\n            is_custom_provider = embedding_provider and embedding_provider != \"Bring your own\"\n            provider = embedding_provider.lower() if is_custom_provider and embedding_provider is not None else None\n\n            build_config[\"embedding_model\"][\"show\"] = not bool(provider)\n            build_config[\"embedding_model\"][\"required\"] = not bool(provider)\n\n        # Early return if no API endpoint is configured\n        if not self.get_api_endpoint():\n            return build_config\n\n        # Configure search method and related options\n        return self._configure_search_options(build_config)\n\n    def _configure_search_options(self, build_config: dict) -> dict:\n        \"\"\"Configure hybrid search, reranker, and vector search options.\"\"\"\n        # Detect available hybrid search capabilities\n        hybrid_capabilities = self._detect_hybrid_capabilities()\n\n        # Return if we haven't selected a collection\n        if not build_config[\"collection_name\"][\"options\"] or not build_config[\"collection_name\"][\"value\"]:\n            return build_config\n\n        # Get collection options\n        collection_options = self._get_collection_options(build_config)\n\n        # Get the selected collection index\n        index = build_config[\"collection_name\"][\"options\"].index(build_config[\"collection_name\"][\"value\"])\n        provider = build_config[\"collection_name\"][\"options_metadata\"][index][\"provider\"]\n        build_config[\"embedding_model\"][\"show\"] = not bool(provider)\n        build_config[\"embedding_model\"][\"required\"] = not bool(provider)\n\n        # Determine search configuration\n        is_vector_search = build_config[\"search_method\"][\"value\"] == \"Vector Search\"\n        is_autodetect = build_config[\"autodetect_collection\"][\"value\"]\n\n        # Apply hybrid search configuration\n        if hybrid_capabilities[\"available\"]:\n            build_config[\"search_method\"][\"show\"] = True\n            build_config[\"search_method\"][\"options\"] = [\"Hybrid Search\", \"Vector Search\"]\n            build_config[\"search_method\"][\"value\"] = build_config[\"search_method\"].get(\"value\", \"Hybrid Search\")\n\n            build_config[\"reranker\"][\"options\"] = hybrid_capabilities[\"reranker_models\"]\n            build_config[\"reranker\"][\"options_metadata\"] = hybrid_capabilities[\"reranker_metadata\"]\n            if hybrid_capabilities[\"reranker_models\"]:\n                build_config[\"reranker\"][\"value\"] = hybrid_capabilities[\"reranker_models\"][0]\n        else:\n            build_config[\"search_method\"][\"show\"] = False\n            build_config[\"search_method\"][\"options\"] = [\"Vector Search\"]\n            build_config[\"search_method\"][\"value\"] = \"Vector Search\"\n            build_config[\"reranker\"][\"options\"] = []\n            build_config[\"reranker\"][\"options_metadata\"] = []\n\n        # Configure reranker visibility and state\n        hybrid_enabled = (\n            collection_options[\"rerank_enabled\"] and build_config[\"search_method\"][\"value\"] == \"Hybrid Search\"\n        )\n\n        build_config[\"reranker\"][\"show\"] = hybrid_enabled\n        build_config[\"reranker\"][\"toggle_value\"] = hybrid_enabled\n        build_config[\"reranker\"][\"toggle_disable\"] = is_vector_search\n\n        # Configure lexical terms\n        lexical_visible = collection_options[\"lexical_enabled\"] and not is_vector_search\n        build_config[\"lexical_terms\"][\"show\"] = lexical_visible\n        build_config[\"lexical_terms\"][\"value\"] = \"\" if is_vector_search else build_config[\"lexical_terms\"][\"value\"]\n\n        # Configure search type and score threshold\n        build_config[\"search_type\"][\"show\"] = is_vector_search\n        build_config[\"search_score_threshold\"][\"show\"] = is_vector_search\n\n        # Force similarity search for hybrid mode or autodetect\n        if hybrid_enabled or is_autodetect:\n            build_config[\"search_type\"][\"value\"] = \"Similarity\"\n\n        return build_config\n\n    def _detect_hybrid_capabilities(self) -> dict:\n        \"\"\"Detect available hybrid search and reranking capabilities.\"\"\"\n        environment = self.get_environment(self.environment)\n        client = DataAPIClient(environment=environment)\n        admin_client = client.get_admin()\n        db_admin = admin_client.get_database_admin(self.get_api_endpoint(), token=self.token)\n\n        try:\n            providers = db_admin.find_reranking_providers()\n            reranker_models = [\n                model.name for provider_data in providers.reranking_providers.values() for model in provider_data.models\n            ]\n            reranker_metadata = [\n                {\"icon\": self.get_provider_icon(provider_name=model.name.split(\"/\")[0])}\n                for provider in providers.reranking_providers.values()\n                for model in provider.models\n            ]\n        except Exception as e:  # noqa: BLE001\n            self.log(f\"Hybrid search not available: {e}\")\n            return {\n                \"available\": False,\n                \"reranker_models\": [],\n                \"reranker_metadata\": [],\n            }\n        else:\n            return {\n                \"available\": True,\n                \"reranker_models\": reranker_models,\n                \"reranker_metadata\": reranker_metadata,\n            }\n\n    def _get_collection_options(self, build_config: dict) -> dict:\n        \"\"\"Retrieve collection-level search options.\"\"\"\n        database = self.get_database_object(api_endpoint=build_config[\"api_endpoint\"][\"value\"])\n        collection = database.get_collection(\n            name=build_config[\"collection_name\"][\"value\"],\n            keyspace=build_config[\"keyspace\"][\"value\"],\n        )\n\n        col_options = collection.options()\n\n        return {\n            \"rerank_enabled\": bool(col_options.rerank and col_options.rerank.enabled),\n            \"lexical_enabled\": bool(col_options.lexical and col_options.lexical.enabled),\n        }\n\n    @check_cached_vector_store\n    def build_vector_store(self):\n        try:\n            from langchain_astradb import AstraDBVectorStore\n            from langchain_astradb.utils.astradb import HybridSearchMode\n        except ImportError as e:\n            msg = (\n                \"Could not import langchain Astra DB integration package. \"\n                \"Please install it with `pip install langchain-astradb`.\"\n            )\n            raise ImportError(msg) from e\n\n        # Get the embedding model and additional params\n        embedding_params = {\"embedding\": self.embedding_model} if self.embedding_model else {}\n\n        # Get the additional parameters\n        additional_params = self.astradb_vectorstore_kwargs or {}\n\n        # Get Langflow version and platform information\n        __version__ = get_version_info()[\"version\"]\n        langflow_prefix = \"\"\n        # if os.getenv(\"AWS_EXECUTION_ENV\") == \"AWS_ECS_FARGATE\":  # TODO: More precise way of detecting\n        #     langflow_prefix = \"ds-\"\n\n        # Get the database object\n        database = self.get_database_object()\n        autodetect = self.collection_name in database.list_collection_names() and self.autodetect_collection\n\n        # Bundle up the auto-detect parameters\n        autodetect_params = {\n            \"autodetect_collection\": autodetect,\n            \"content_field\": (\n                self.content_field\n                if self.content_field and embedding_params\n                else (\n                    \"page_content\"\n                    if embedding_params\n                    and self.collection_data(collection_name=self.collection_name, database=database) == 0\n                    else None\n                )\n            ),\n            \"ignore_invalid_documents\": self.ignore_invalid_documents,\n        }\n\n        # Choose HybridSearchMode based on the selected param\n        hybrid_search_mode = HybridSearchMode.DEFAULT if self.search_method == \"Hybrid Search\" else HybridSearchMode.OFF\n\n        # Attempt to build the Vector Store object\n        try:\n            vector_store = AstraDBVectorStore(\n                # Astra DB Authentication Parameters\n                token=self.token,\n                api_endpoint=database.api_endpoint,\n                namespace=database.keyspace,\n                collection_name=self.collection_name,\n                environment=self.environment,\n                # Hybrid Search Parameters\n                hybrid_search=hybrid_search_mode,\n                # Astra DB Usage Tracking Parameters\n                ext_callers=[(f\"{langflow_prefix}langflow\", __version__)],\n                # Astra DB Vector Store Parameters\n                **autodetect_params,\n                **embedding_params,\n                **additional_params,\n            )\n        except ValueError as e:\n            msg = f\"Error initializing AstraDBVectorStore: {e}\"\n            raise ValueError(msg) from e\n\n        # Add documents to the vector store\n        self._add_documents_to_vector_store(vector_store)\n\n        return vector_store\n\n    def _add_documents_to_vector_store(self, vector_store) -> None:\n        self.ingest_data = self._prepare_ingest_data()\n\n        documents = []\n        for _input in self.ingest_data or []:\n            if isinstance(_input, Data):\n                documents.append(_input.to_lc_document())\n            else:\n                msg = \"Vector Store Inputs must be Data objects.\"\n                raise TypeError(msg)\n\n        documents = [\n            Document(page_content=doc.page_content, metadata=serialize(doc.metadata, to_str=True)) for doc in documents\n        ]\n\n        if documents and self.deletion_field:\n            self.log(f\"Deleting documents where {self.deletion_field}\")\n            try:\n                database = self.get_database_object()\n                collection = database.get_collection(self.collection_name, keyspace=database.keyspace)\n                delete_values = list({doc.metadata[self.deletion_field] for doc in documents})\n                self.log(f\"Deleting documents where {self.deletion_field} matches {delete_values}.\")\n                collection.delete_many({f\"metadata.{self.deletion_field}\": {\"$in\": delete_values}})\n            except ValueError as e:\n                msg = f\"Error deleting documents from AstraDBVectorStore based on '{self.deletion_field}': {e}\"\n                raise ValueError(msg) from e\n\n        if documents:\n            self.log(f\"Adding {len(documents)} documents to the Vector Store.\")\n            try:\n                vector_store.add_documents(documents)\n            except ValueError as e:\n                msg = f\"Error adding documents to AstraDBVectorStore: {e}\"\n                raise ValueError(msg) from e\n        else:\n            self.log(\"No documents to add to the Vector Store.\")\n\n    def _map_search_type(self) -> str:\n        search_type_mapping = {\n            \"Similarity with score threshold\": \"similarity_score_threshold\",\n            \"MMR (Max Marginal Relevance)\": \"mmr\",\n        }\n\n        return search_type_mapping.get(self.search_type, \"similarity\")\n\n    def _build_search_args(self):\n        # Clean up the search query\n        query = self.search_query if isinstance(self.search_query, str) and self.search_query.strip() else None\n        lexical_terms = self.lexical_terms or None\n\n        # Check if we have a search query, and if so set the args\n        if query:\n            args = {\n                \"query\": query,\n                \"search_type\": self._map_search_type(),\n                \"k\": self.number_of_results,\n                \"score_threshold\": self.search_score_threshold,\n                \"lexical_query\": lexical_terms,\n            }\n        elif self.advanced_search_filter:\n            args = {\n                \"n\": self.number_of_results,\n            }\n        else:\n            return {}\n\n        filter_arg = self.advanced_search_filter or {}\n        if filter_arg:\n            args[\"filter\"] = filter_arg\n\n        return args\n\n    def search_documents(self, vector_store=None) -> list[Data]:\n        vector_store = vector_store or self.build_vector_store()\n\n        self.log(f\"Search input: {self.search_query}\")\n        self.log(f\"Search type: {self.search_type}\")\n        self.log(f\"Number of results: {self.number_of_results}\")\n        self.log(f\"store.hybrid_search: {vector_store.hybrid_search}\")\n        self.log(f\"Lexical terms: {self.lexical_terms}\")\n        self.log(f\"Reranker: {self.reranker}\")\n\n        try:\n            search_args = self._build_search_args()\n        except ValueError as e:\n            msg = f\"Error in AstraDBVectorStore._build_search_args: {e}\"\n            raise ValueError(msg) from e\n\n        if not search_args:\n            self.log(\"No search input or filters provided. Skipping search.\")\n            return []\n\n        docs = []\n        search_method = \"search\" if \"query\" in search_args else \"metadata_search\"\n\n        try:\n            self.log(f\"Calling vector_store.{search_method} with args: {search_args}\")\n            docs = getattr(vector_store, search_method)(**search_args)\n        except ValueError as e:\n            msg = f\"Error performing {search_method} in AstraDBVectorStore: {e}\"\n            raise ValueError(msg) from e\n\n        self.log(f\"Retrieved documents: {len(docs)}\")\n\n        data = docs_to_data(docs)\n        self.log(f\"Converted documents to data: {len(data)}\")\n        self.status = data\n\n        return data\n\n    def get_retriever_kwargs(self):\n        search_args = self._build_search_args()\n\n        return {\n            \"search_type\": self._map_search_type(),\n            \"search_kwargs\": search_args,\n        }\n",
+              "fileTypes": [],
+              "file_path": "",
+              "password": false,
+              "name": "code",
+              "advanced": true,
+              "dynamic": true,
+              "info": "",
+              "load_from_db": false,
+              "title_case": false
+            },
+            "collection_name": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [],
+              "options_metadata": [],
+              "combobox": true,
+              "dialog_inputs": {
+                "functionality": "create",
+                "fields": {
+                  "data": {
+                    "node": {
+                      "name": "create_collection",
+                      "description": "Please allow several seconds for creation to complete.",
+                      "display_name": "Create new collection",
+                      "field_order": [
+                        "01_new_collection_name",
+                        "02_embedding_generation_provider",
+                        "03_embedding_generation_model",
+                        "04_dimension"
+                      ],
+                      "template": {
+                        "01_new_collection_name": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "load_from_db": false,
+                          "list": false,
+                          "list_add_label": "Add More",
+                          "required": true,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "new_collection_name",
+                          "value": "",
+                          "display_name": "Name",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Name of the new collection to create in Astra DB.",
+                          "title_case": false,
+                          "track_in_telemetry": false,
+                          "type": "str",
+                          "_input_type": "StrInput"
+                        },
+                        "02_embedding_generation_provider": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "options": [],
+                          "options_metadata": [],
+                          "combobox": false,
+                          "dialog_inputs": {},
+                          "toggle": false,
+                          "required": true,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "embedding_generation_provider",
+                          "value": "",
+                          "display_name": "Embedding generation method",
+                          "advanced": false,
+                          "dynamic": false,
+                          "helper_text": "To create collections with more embedding provider options, go to <a class=\"underline\" href=\"https://astra.datastax.com/\" target=\" _blank\" rel=\"noopener noreferrer\">your database in Astra DB</a>",
+                          "info": "Provider to use for generating embeddings.",
+                          "real_time_refresh": true,
+                          "title_case": false,
+                          "track_in_telemetry": true,
+                          "external_options": {},
+                          "type": "str",
+                          "_input_type": "DropdownInput"
+                        },
+                        "03_embedding_generation_model": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "options": [],
+                          "options_metadata": [],
+                          "combobox": false,
+                          "dialog_inputs": {},
+                          "toggle": false,
+                          "required": false,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "embedding_generation_model",
+                          "value": "",
+                          "display_name": "Embedding model",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Model to use for generating embeddings.",
+                          "real_time_refresh": true,
+                          "title_case": false,
+                          "track_in_telemetry": true,
+                          "external_options": {},
+                          "type": "str",
+                          "_input_type": "DropdownInput"
+                        },
+                        "04_dimension": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "list": false,
+                          "list_add_label": "Add More",
+                          "required": false,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "dimension",
+                          "display_name": "Dimensions",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Dimensions of the embeddings to generate.",
+                          "title_case": false,
+                          "track_in_telemetry": true,
+                          "type": "int",
+                          "_input_type": "IntInput"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "toggle": false,
+              "required": true,
+              "placeholder": "",
+              "show": false,
+              "name": "collection_name",
+              "value": "",
+              "display_name": "Collection",
+              "advanced": false,
+              "dynamic": false,
+              "info": "The name of the collection within Astra DB where the vectors will be stored.",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "content_field": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "content_field",
+              "value": "",
+              "display_name": "Content Field",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Field to use as the text content field for the vector store.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "_input_type": "StrInput"
+            },
+            "database_name": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [],
+              "options_metadata": [],
+              "combobox": true,
+              "dialog_inputs": {
+                "functionality": "create",
+                "fields": {
+                  "data": {
+                    "node": {
+                      "name": "create_database",
+                      "description": "Please allow several minutes for creation to complete.",
+                      "display_name": "Create new database",
+                      "field_order": [
+                        "01_new_database_name",
+                        "02_cloud_provider",
+                        "03_region"
+                      ],
+                      "template": {
+                        "01_new_database_name": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "load_from_db": false,
+                          "list": false,
+                          "list_add_label": "Add More",
+                          "required": true,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "new_database_name",
+                          "value": "",
+                          "display_name": "Name",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Name of the new database to create in Astra DB.",
+                          "title_case": false,
+                          "track_in_telemetry": false,
+                          "type": "str",
+                          "_input_type": "StrInput"
+                        },
+                        "02_cloud_provider": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "options": [],
+                          "options_metadata": [],
+                          "combobox": false,
+                          "dialog_inputs": {},
+                          "toggle": false,
+                          "required": true,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "cloud_provider",
+                          "value": "",
+                          "display_name": "Cloud provider",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Cloud provider for the new database.",
+                          "real_time_refresh": true,
+                          "title_case": false,
+                          "track_in_telemetry": true,
+                          "external_options": {},
+                          "type": "str",
+                          "_input_type": "DropdownInput"
+                        },
+                        "03_region": {
+                          "tool_mode": false,
+                          "trace_as_metadata": true,
+                          "options": [],
+                          "options_metadata": [],
+                          "combobox": false,
+                          "dialog_inputs": {},
+                          "toggle": false,
+                          "required": true,
+                          "placeholder": "",
+                          "show": true,
+                          "name": "region",
+                          "value": "",
+                          "display_name": "Region",
+                          "advanced": false,
+                          "dynamic": false,
+                          "info": "Region for the new database.",
+                          "title_case": false,
+                          "track_in_telemetry": true,
+                          "external_options": {},
+                          "type": "str",
+                          "_input_type": "DropdownInput"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "toggle": false,
+              "required": true,
+              "placeholder": "",
+              "show": true,
+              "name": "database_name",
+              "value": "",
+              "display_name": "Database",
+              "advanced": false,
+              "dynamic": false,
+              "info": "The Database name for the Astra DB instance.",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "deletion_field": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "deletion_field",
+              "value": "",
+              "display_name": "Deletion Based On Field",
+              "advanced": true,
+              "dynamic": false,
+              "info": "When this parameter is provided, documents in the target collection with metadata field values matching the input metadata field value will be deleted before new data is loaded.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "_input_type": "StrInput"
+            },
+            "environment": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [
+                "prod",
+                "test",
+                "dev"
+              ],
+              "options_metadata": [],
+              "combobox": true,
+              "dialog_inputs": {},
+              "toggle": false,
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "environment",
+              "value": "prod",
+              "display_name": "Environment",
+              "advanced": true,
+              "dynamic": false,
+              "info": "The environment for the Astra DB API Endpoint.",
+              "real_time_refresh": true,
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "ignore_invalid_documents": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "ignore_invalid_documents",
+              "value": false,
+              "display_name": "Ignore Invalid Documents",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Boolean flag to determine whether to ignore invalid documents at runtime.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "_input_type": "BoolInput"
+            },
+            "keyspace": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [],
+              "options_metadata": [],
+              "combobox": false,
+              "dialog_inputs": {},
+              "toggle": false,
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "keyspace",
+              "value": "",
+              "display_name": "Keyspace",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Optional keyspace within Astra DB to use for the collection.",
+              "real_time_refresh": true,
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "lexical_terms": {
+              "separator": " ",
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "Enter terms to search...",
+              "show": false,
+              "name": "lexical_terms",
+              "value": "",
+              "display_name": "Lexical Terms",
+              "advanced": false,
+              "input_types": [
+                "Message"
+              ],
+              "dynamic": false,
+              "info": "Add additional terms/keywords to augment search precision.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "query",
+              "_input_type": "QueryInput"
+            },
+            "number_of_results": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "number_of_results",
+              "value": 4,
+              "display_name": "Number of Search Results",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Number of search results to return.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "type": "int",
+              "_input_type": "IntInput"
+            },
+            "reranker": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [],
+              "options_metadata": [],
+              "combobox": false,
+              "dialog_inputs": {},
+              "toggle": true,
+              "required": false,
+              "placeholder": "",
+              "show": false,
+              "name": "reranker",
+              "value": "",
+              "display_name": "Reranker",
+              "advanced": false,
+              "dynamic": false,
+              "info": "Post-retrieval model that re-scores results for optimal relevance ranking.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "search_method": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [
+                "Hybrid Search",
+                "Vector Search"
+              ],
+              "options_metadata": [
+                {
+                  "icon": "SearchHybrid"
+                },
+                {
+                  "icon": "SearchVector"
+                }
+              ],
+              "combobox": false,
+              "dialog_inputs": {},
+              "toggle": false,
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "search_method",
+              "value": "Vector Search",
+              "display_name": "Search Method",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Determine how your content is matched: Vector finds semantic similarity, and Hybrid Search (suggested) combines both approaches with a reranker.",
+              "real_time_refresh": true,
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "search_query": {
+              "tool_mode": true,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "load_from_db": false,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "Enter a query...",
+              "show": true,
+              "name": "search_query",
+              "value": "",
+              "display_name": "Search Query",
+              "advanced": false,
+              "input_types": [
+                "Message"
+              ],
+              "dynamic": false,
+              "info": "Enter a query to run a similarity search.",
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "query",
+              "_input_type": "QueryInput"
+            },
+            "search_score_threshold": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "search_score_threshold",
+              "value": 0.0,
+              "display_name": "Search Score Threshold",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Minimum similarity score threshold for search results. (when using 'Similarity with score threshold')",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "type": "float",
+              "_input_type": "FloatInput"
+            },
+            "search_type": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "options": [
+                "Similarity",
+                "Similarity with score threshold",
+                "MMR (Max Marginal Relevance)"
+              ],
+              "options_metadata": [],
+              "combobox": false,
+              "dialog_inputs": {},
+              "toggle": false,
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "search_type",
+              "value": "Similarity",
+              "display_name": "Search Type",
+              "advanced": true,
+              "dynamic": false,
+              "info": "Search type to use",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "external_options": {},
+              "type": "str",
+              "_input_type": "DropdownInput"
+            },
+            "should_cache_vector_store": {
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "list": false,
+              "list_add_label": "Add More",
+              "required": false,
+              "placeholder": "",
+              "show": true,
+              "name": "should_cache_vector_store",
+              "value": true,
+              "display_name": "Cache Vector Store",
+              "advanced": true,
+              "dynamic": false,
+              "info": "If True, the vector store will be cached for the current build of the component. This is useful for components that have multiple output methods and want to share the same vector store.",
+              "title_case": false,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "_input_type": "BoolInput"
+            },
+            "token": {
+              "load_from_db": true,
+              "required": true,
+              "placeholder": "",
+              "show": true,
+              "name": "token",
+              "value": "ASTRA_DB_APPLICATION_TOKEN",
+              "display_name": "Astra DB Application Token",
+              "advanced": false,
+              "input_types": [],
+              "dynamic": false,
+              "info": "Authentication token for accessing Astra DB.",
+              "real_time_refresh": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "password": true,
+              "type": "str",
+              "_input_type": "SecretStrInput"
+            }
+          },
+          "description": "Ingest and search documents in Astra DB",
+          "icon": "AstraDB",
+          "base_classes": [
+            "Data",
+            "DataFrame",
+            "VectorStore"
+          ],
+          "display_name": "Astra DB",
+          "documentation": "https://docs.langflow.org/bundles-datastax#astra-db",
+          "minimized": false,
+          "custom_fields": {},
+          "output_types": [],
+          "pinned": false,
+          "conditional_paths": [],
+          "frozen": false,
+          "outputs": [
+            {
+              "types": [
+                "Data"
+              ],
+              "selected": "Data",
+              "name": "search_results",
+              "display_name": "Search Results",
+              "method": "search_documents",
+              "value": "__UNDEFINED__",
+              "cache": true,
+              "allows_loop": false,
+              "group_outputs": false,
+              "tool_mode": true
+            },
+            {
+              "types": [
+                "DataFrame"
+              ],
+              "selected": "DataFrame",
+              "name": "dataframe",
+              "display_name": "DataFrame",
+              "method": "as_dataframe",
+              "value": "__UNDEFINED__",
+              "cache": true,
+              "allows_loop": false,
+              "group_outputs": false,
+              "tool_mode": true
+            },
+            {
+              "types": [
+                "VectorStore"
+              ],
+              "selected": "VectorStore",
+              "name": "vectorstoreconnection",
+              "hidden": false,
+              "display_name": "Vector Store Connection",
+              "method": "as_vector_store",
+              "value": "__UNDEFINED__",
+              "cache": true,
+              "allows_loop": false,
+              "group_outputs": false,
+              "tool_mode": true
+            }
+          ],
+          "field_order": [
+            "token",
+            "environment",
+            "database_name",
+            "api_endpoint",
+            "keyspace",
+            "collection_name",
+            "autodetect_collection",
+            "ingest_data",
+            "search_query",
+            "should_cache_vector_store",
+            "embedding_model",
+            "content_field",
+            "deletion_field",
+            "ignore_invalid_documents",
+            "astradb_vectorstore_kwargs",
+            "search_method",
+            "reranker",
+            "lexical_terms",
+            "number_of_results",
+            "search_type",
+            "search_score_threshold",
+            "advanced_search_filter"
+          ],
+          "beta": false,
+          "legacy": false,
+          "edited": false,
+          "metadata": {
+            "module": "lfx.components.datastax.astradb_vectorstore.AstraDBVectorStoreComponent",
+            "code_hash": "2b12cdb96b67",
+            "dependencies": {
+              "total_dependencies": 4,
+              "dependencies": [
+                {
+                  "name": "astrapy",
+                  "version": "2.1.0"
+                },
+                {
+                  "name": "langchain_core",
+                  "version": "0.3.79"
+                },
+                {
+                  "name": "lfx",
+                  "version": null
+                },
+                {
+                  "name": "langchain_astradb",
+                  "version": "0.6.1"
+                }
+              ]
+            }
+          },
+          "tool_mode": false
+        },
+        "selected_output": "<Need Edit!> (选择性填写\"outputs\"中列表元素的\"name\"字段)",
+        "type": "AstraDB"
       }
     }
   ]
