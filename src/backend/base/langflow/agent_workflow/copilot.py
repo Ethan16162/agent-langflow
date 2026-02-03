@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
+import asyncio
 import copy
+import hashlib
 import json
+import math
 import re
 import secrets
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
-import asyncio
-import hashlib
-import math
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
@@ -19,17 +19,20 @@ from lfx.log.logger import logger
 
 from langflow.services.deps import get_settings_service
 
+
 def load_system_prompt_auto_inject() -> str:
     # 1. 加载 nodes_auto_inject.json
     nodes_path = Path(__file__).parent / "Files/nodes_auto_inject.json"
     with nodes_path.open("r", encoding="utf-8") as f:
         node_list = json.load(f)  # 这是一个 list of dicts
-    
+
     # 2. 将每个节点对象转为格式化的 JSON 字符串，并用 ``` 包裹
     formatted_nodes = []
     for idx, node in enumerate(node_list, start=1):
         json_str = json.dumps(node, ensure_ascii=False, indent=2)
-        formatted_nodes.append(f"\n\n## {idx}. {node.get('data').get('type') or node.get('id').split('-')[0]} 节点模板 \n\n```\n\n{json_str}\n\n```")
+        formatted_nodes.append(
+            f"\n\n## {idx}. {node.get('data').get('type') or node.get('id').split('-')[0]} 节点模板 \n\n```\n\n{json_str}\n\n```"
+        )
 
     # 用两个换行符分隔每个节点块（你也可以用一个，根据需要调整）
     nodes_block = "\n\n".join(formatted_nodes)
@@ -47,14 +50,13 @@ def load_system_prompt_auto_inject() -> str:
     # with prompt_path2.open("w", encoding="utf-8") as f:
     #     f.write(updated_prompt)
 
-
     # """Load the system prompt from markdown file."""
     # prompt_path = Path(__file__).parent / "system_prompt1.md"
     # with prompt_path.open("r", encoding="utf-8") as f:
     #     return f.read()
-    
 
     return updated_prompt
+
 
 def load_system_prompt() -> str:
     """Load the system prompt from markdown file."""
@@ -167,6 +169,7 @@ def _parse_handle_value(val: Any) -> dict:
             return {}
     return {}
 
+
 def _handle_to_langflow_str(obj: dict) -> str:
     """将 handle 对象转为 Langflow 规范字符串（用 œ 替代 \"，与 answer.json 一致）。"""
     s = json.dumps(obj, separators=(",", ":"), ensure_ascii=False)
@@ -235,9 +238,10 @@ def normalize_workflow_edges(workflow_data: dict[str, Any]) -> dict[str, Any]:
 
         if not source or not target:
             continue
-            msg = (
-                "edge[%d] 的 data.sourceHandle.id 或 data.targetHandle.id 为空；"
-                "source=%r, target=%r" % (i, source, target)
+            msg = "edge[%d] 的 data.sourceHandle.id 或 data.targetHandle.id 为空；source=%r, target=%r" % (
+                i,
+                source,
+                target,
             )
             logger.error(msg)
             raise ValueError(msg)
@@ -245,17 +249,19 @@ def normalize_workflow_edges(workflow_data: dict[str, Any]) -> dict[str, Any]:
         # 3) 校验：sourceHandle.id、targetHandle.id 必须在 workflow.data.nodes 中存在
         if source not in node_ids:
             continue
-            msg = (
-                "edge[%d] 的 data.sourceHandle.id=%r 在 workflow.data.nodes 中不存在；"
-                "可选 node id: %s" % (i, source, sorted(node_ids)[:20])
+            msg = "edge[%d] 的 data.sourceHandle.id=%r 在 workflow.data.nodes 中不存在；可选 node id: %s" % (
+                i,
+                source,
+                sorted(node_ids)[:20],
             )
             logger.error(msg)
             raise ValueError(msg)
         if target not in node_ids:
             continue
-            msg = (
-                "edge[%d] 的 data.targetHandle.id=%r 在 workflow.data.nodes 中不存在；"
-                "可选 node id: %s" % (i, target, sorted(node_ids)[:20])
+            msg = "edge[%d] 的 data.targetHandle.id=%r 在 workflow.data.nodes 中不存在；可选 node id: %s" % (
+                i,
+                target,
+                sorted(node_ids)[:20],
             )
             logger.error(msg)
             raise ValueError(msg)
@@ -339,10 +345,13 @@ def format_workflow_json(workflow_data: dict[str, Any]) -> dict[str, Any]:
     # Ensure viewport exists
     if "viewport" not in workflow_data:
         workflow_data["viewport"] = {"x": 0, "y": 0, "zoom": 1}
-
-    nodes = workflow_data.get("nodes", [])
-    n = len(nodes)
     
+    # import pdb; pdb.set_trace()
+
+    data = workflow_data.get("data")
+    nodes = data.get("nodes", [])
+    n = len(nodes)
+
     # import pdb; pdb.set_trace
     # Layout parameters: grid with spacing and small jitter to avoid exact overlap
     if n > 0:
@@ -415,6 +424,7 @@ def format_workflow_json(workflow_data: dict[str, Any]) -> dict[str, Any]:
 
     return workflow_data
 
+
 # 检测LLM输出是否达到max tokens被截断，并做拼接
 async def invoke_with_continuation(
     llm,
@@ -423,8 +433,7 @@ async def invoke_with_continuation(
     max_rounds: int = 3,
     logger=None,
 ) -> str:
-    """
-    Invoke LLM with automatic continuation if finish_reason == 'length'.
+    """Invoke LLM with automatic continuation if finish_reason == 'length'.
     Returns the full concatenated response text.
     """
     full_text = ""
@@ -436,8 +445,10 @@ async def invoke_with_continuation(
         full_text += chunk
 
         finish_reason = response.response_metadata.get("finish_reason")
-        print(f"Continuation round {round_idx} /{max_rounds}, "
-                f"chunk_len={len(chunk)}, full answer len={len(full_text)}, finish_reason={finish_reason}")
+        print(
+            f"Continuation round {round_idx} /{max_rounds}, "
+            f"chunk_len={len(chunk)}, full answer len={len(full_text)}, finish_reason={finish_reason}"
+        )
 
         # 正常结束
         if finish_reason != "length":
@@ -452,9 +463,7 @@ async def invoke_with_continuation(
         )
 
         current_messages = (
-            current_messages
-            + [SystemMessage(content=continuation_prompt)]
-            + [HumanMessage(content=full_text)]
+            current_messages + [SystemMessage(content=continuation_prompt)] + [HumanMessage(content=full_text)]
         )
 
     raise RuntimeError("LLM response truncated after maximum continuation rounds")
@@ -475,7 +484,8 @@ async def generate_workflow_with_llm(
 
     # Get OpenAI API key from settings
     # api_key = settings_service.settings.openai_api_key
-    api_key = "ms-0d6c23a7-6bc2-442a-b01f-ae10f95d3e65"
+    api_key = "sk-6f8e6f1012494df29bff153af1606271"
+    base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     if not api_key:
         raise ValueError("OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.")
 
@@ -486,12 +496,12 @@ async def generate_workflow_with_llm(
     try:
         await logger.ainfo("Initializing LLM with Deepseek API...")
         llm = ChatOpenAI(
-            model="deepseek-chat",
-            openai_api_key="sk-882115c34ef04e0bae6d9724597fa0fa",  # 你的 Deepseek API Key
+            model="qwen-plus",
+            openai_api_key=api_key,  # 你的 API Key
             temperature=0,
-            max_completion_tokens=8192,
-            max_tokens=8192,
-            base_url="https://api.deepseek.com/v1",
+            max_completion_tokens=32768,
+            max_tokens=32768,
+            base_url=base_url,
         )
         await logger.ainfo("ModelScope LLM initialized successfully")
     except Exception as e:
@@ -532,8 +542,8 @@ async def generate_workflow_with_llm(
                 f"Please correct the output and return only a valid workflow JSON object."
             )
             # Also include last response text for context if available
-            if last_response_text:
-                feedback += f"\nPrevious LLM response was:\n{last_response_text}"
+            # if last_response_text:
+            #     feedback += f"\nPrevious LLM response was:\n{last_response_text}"
             messages.append(HumanMessage(content=feedback))
 
         # =========================== 3. Invoke LLM
@@ -541,12 +551,12 @@ async def generate_workflow_with_llm(
             # response = await llm.ainvoke(messages)
             # # import pdb; pdb.set_trace()
             # response_text = response.content or ""
-            
+
             try:
                 response_text = await invoke_with_continuation(
                     llm,
                     messages,
-                    max_rounds=15,   # 一般 2~3 就够
+                    max_rounds=15,  # 一般 2~3 就够
                     logger=logger,
                 )
                 last_response_text = response_text
@@ -565,8 +575,6 @@ async def generate_workflow_with_llm(
                 await logger.aexception("LLM continuation error")
                 await asyncio.sleep(attempt * 0.5)
                 continue
-
-
 
             if not response_text:
                 last_error = "Empty response from LLM"

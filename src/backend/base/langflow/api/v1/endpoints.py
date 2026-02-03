@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import time
 from collections.abc import AsyncGenerator
 from http import HTTPStatus
+from pathlib import Path
 from typing import TYPE_CHECKING, Annotated
 from uuid import UUID, uuid4
 
@@ -25,10 +27,6 @@ from lfx.log.logger import logger
 from lfx.schema.schema import InputValueRequest
 from lfx.services.settings.service import SettingsService
 from sqlmodel import select
-
-import json
-import os
-from pathlib import Path
 
 from langflow.api.utils import CurrentActiveUser, DbSession, extract_global_variables_from_headers, parse_value
 from langflow.api.v1.schemas import (
@@ -87,9 +85,7 @@ async def parse_input_request_from_body(http_request: Request) -> SimplifiedAPIR
         return SimplifiedAPIRequest()
 
 
-def extract_selected_nodes(
-    all_types: dict, node_selector: dict[str, list[str]] | None = None
-) -> dict:
+def extract_selected_nodes(all_types: dict, node_selector: dict[str, list[str]] | None = None) -> dict:
     """Extract selected nodes from all_types based on the node_selector mapping.
 
     Args:
@@ -123,28 +119,36 @@ def extract_selected_nodes(
 
                 selected_nodes[category][node_name] = category_nodes[node_name]
         else:
-            logger.warning(f"Invalid selection type for category '{category}': {type(selection)}. Expected list or 'all'.")
+            logger.warning(
+                f"Invalid selection type for category '{category}': {type(selection)}. Expected list or 'all'."
+            )
 
     return selected_nodes
 
 
 def extract_editable_fields_from_node(node_data: dict) -> dict:
     """Extract editable fields (fields that need LLM to fill) from a node.
-    
+
     Returns a simplified structure with only the essential fields marked for editing.
     """
-    template = node_data.get("template", {}) #每个组件的输入
-    outputs = node_data.get("outputs", []) #每个组件的输出
-    
+    template = node_data.get("template", {})  # 每个组件的输入
+    outputs = node_data.get("outputs", [])  # 每个组件的输出
+
     # Extract key editable template fields
     editable_template = {}
-    
+
     # List of important fields that LLM should edit
     important_field_keys = [
-        "input_value", "template", "system_message", "tools",
-        "agent_description", "agent_llm", "instructions", "prompt"
+        "input_value",
+        "template",
+        "system_message",
+        "tools",
+        "agent_description",
+        "agent_llm",
+        "instructions",
+        "prompt",
     ]
-    
+
     for name, value in template.items():
         if name != "code" and name != "_type":
             if isinstance(value, dict) and value.get("advanced", True) is False:
@@ -161,18 +165,20 @@ def extract_editable_fields_from_node(node_data: dict) -> dict:
                 continue
             else:
                 editable_template[name] = value
-    
+
     # Extract outputs
     editable_outputs = []
     for output in outputs:
-        editable_outputs.append({
-            "name": output.get("name", ""),
-            "display_name": output.get("display_name", ""),
-            "types": output.get("types", []),
-            "method": output.get("method", ""),
-            "selected": output.get("selected", "")
-        })
-    
+        editable_outputs.append(
+            {
+                "name": output.get("name", ""),
+                "display_name": output.get("display_name", ""),
+                "types": output.get("types", []),
+                "method": output.get("method", ""),
+                "selected": output.get("selected", ""),
+            }
+        )
+
     return {
         "display_name": node_data.get("display_name", ""),
         "description": node_data.get("description", ""),
@@ -233,28 +239,28 @@ def save_selected_nodes_to_json(
                         "display_name": node_data.get("display_name", ""),
                         "id": f"{node_name}-<Need Edit!>",
                         "node": node_data,
-                        "selected_output": "<Need Edit!> (选择性填写\"outputs\"中列表元素的\"name\"字段)",
+                        "selected_output": '<Need Edit!> (选择性填写"outputs"中列表元素的"name"字段)',
                         "type": node_name,
-                    }
+                    },
                 }
             )
-            
+
             # Create simplified version for LLM prompt injection
             editable_fields = extract_editable_fields_from_node(node_data)
             node_inject.append(
                 {
-                "id": f"{node_name}-<Need Edit!>",
-                "data": {
-                    "description": editable_fields.get("description", ""),
-                    "display_name": editable_fields.get("display_name", ""),       
                     "id": f"{node_name}-<Need Edit!>",
-                    "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
-                    "type": node_name,
-                    "node": {
-                        "template": editable_fields.get("template", {}),
-                        "outputs": editable_fields.get("outputs", []),
-                        },                    
-                    }
+                    "data": {
+                        "description": editable_fields.get("description", ""),
+                        "display_name": editable_fields.get("display_name", ""),
+                        "id": f"{node_name}-<Need Edit!>",
+                        "selected_output": '<Need Edit!> (匹配"outputs"中元素的"name"字段)',
+                        "type": node_name,
+                        "node": {
+                            "template": editable_fields.get("template", {}),
+                            "outputs": editable_fields.get("outputs", []),
+                        },
+                    },
                 }
             )
 
@@ -269,7 +275,9 @@ def save_selected_nodes_to_json(
         logger.info(f"Successfully saved {len(node_list)} selected nodes to {output_file}")
         with open(output_file2, "w", encoding="utf-8") as f:
             json.dump(node_inject, f, ensure_ascii=False, indent=2)
-        logger.info(f"Successfully saved {len(node_inject)} selected nodes(injected to system prompt) to {output_file2}")
+        logger.info(
+            f"Successfully saved {len(node_inject)} selected nodes(injected to system prompt) to {output_file2}"
+        )
         return output_file, node_inject
     except Exception as exc:
         logger.error(f"Failed to save selected nodes to {output_file}: {exc}")
@@ -306,8 +314,6 @@ async def get_all():
         return compress_response(all_types)
 
         # Direct dump removed (use jsonable_encoder safe write above).
-
-
 
         return compress_response(all_types)
 
@@ -1083,7 +1089,7 @@ async def save_selected_nodes(
 
     Returns:
         dict: Result containing the file path, node_inject for LLM prompt, and metadata
-    
+
     Raises:
         HTTPException: If an error occurs during the save operation
     """
@@ -1091,23 +1097,21 @@ async def save_selected_nodes(
     # value的取值为"all"时，表示注入该category下的所有节点
     node_selector: dict[str, list[str] | str] = {
         "input_output": ["ChatInput", "ChatOutput"],
-        "models_and_agents": "all",#["Prompt Template", "LanguageModelComponent", "EmbeddingModelComponent"],
+        "models_and_agents": "all",  # ["Prompt Template", "LanguageModelComponent", "EmbeddingModelComponent"],
         # "aaa_guoyansong": "all",
         "chroma": "all",
         "files_and_knowledge": ["File"],
         "processing": ["SplitText", "ParserComponent"],
+        "openai": ["OpenAIEmbeddings"]
     }
-    
+
     try:
         from langflow.interface.components import get_and_cache_all_types_dict
 
         all_types = await get_and_cache_all_types_dict(settings_service=get_settings_service())
 
         output_path, node_inject = save_selected_nodes_to_json(
-            all_types=all_types, 
-            node_selector=node_selector, 
-            save_path=save_path, 
-            filename=filename
+            all_types=all_types, node_selector=node_selector, save_path=save_path, filename=filename
         )
 
         if output_path is None or node_inject is None:
@@ -1123,13 +1127,13 @@ async def save_selected_nodes(
             "nodes_count": total_nodes,
             "categories": list(selected_nodes.keys()),
             "node_inject": node_inject,  # 简化的节点定义，标记需要编辑的字段
-            "inject_description": "node_inject contains simplified node definitions with editable fields marked as '<Need Edit!>'. Use this to inject into LLM system prompt."
+            "inject_description": "node_inject contains simplified node definitions with editable fields marked as '<Need Edit!>'. Use this to inject into LLM system prompt.",
         }
 
     except HTTPException:
         raise
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Error saving nodes: {str(exc)}") from exc
+        raise HTTPException(status_code=500, detail=f"Error saving nodes: {exc!s}") from exc
 
 
 @router.get("/config")

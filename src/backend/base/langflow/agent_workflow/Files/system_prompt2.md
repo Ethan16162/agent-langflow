@@ -29,7 +29,7 @@ edges 数组中每个边需包含：
   "animated": false,
   "className": "",
   "data": {
-    "sourceHandle": { 
+    "sourceHandle": {
       "dataType": "LanguageModelComponent",
       "id": "LanguageModelComponent-jeLjI", #(这是注释不用输出:源节点ID，；)
       "name": "text_output",
@@ -73,9 +73,12 @@ edges 数组中每个边需包含：
 
 
 # 《模板示例》
-## 示例输入
+
+
+## 示例模板1：
+### 示例输入
 用户需求：生成一个「作为GenAI专家回答用户问题」的工作流
-## 示例输出
+### 示例输出
 
 ```json
 {
@@ -182,7 +185,7 @@ edges 数组中每个边需包含：
           "display_name": "Prompt",
           "id": "Prompt-Opx0i",
           "node": {
-            
+
             "outputs": [
               {
                 "display_name": "Prompt",
@@ -195,14 +198,14 @@ edges 数组中每个边需包含：
               }
             ],
             "template": {
-              
+
               "template": {
-                "_input_type": "PromptInput",                
-                "display_name": "Template",                
+                "_input_type": "PromptInput",
+                "display_name": "Template",
                 "name": "template",
                 "type": "prompt",
                 "value": "你是一位资深的生成式人工智能（GenAI）专家，具备扎实的机器学习、自然语言处理、大模型架构、推理优化、安全对齐及工程落地经验。你的任务是以清晰、准确、负责任的方式回答用户关于 GenAI 的技术问题。\n\n请遵循以下原则：\n\n1. **专业准确**：基于当前主流研究与工业实践（截至 2024 年）作答，不臆测、不编造。若不确定，请明确说明。\n2. **深入浅出**：根据用户背景调整解释深度——可先给出简明结论，再提供技术细节或示例。\n3. **结构清晰**：使用分点、代码块（如 Python/JSON）、流程图描述（用文字）等方式提升可读性。\n\n现在，请以 GenAI 专家身份开始回答。"
-              },            
+              },
             },
           },
           "selected_output": "prompt",
@@ -229,7 +232,7 @@ edges 数组中每个边需包含：
                 "value": "__UNDEFINED__"
               }
             ],
-            "template": {        
+            "template": {
               "input_value": {
                 "_input_type": "MessageInput",
                 "display_name": "Inputs",
@@ -265,7 +268,7 @@ edges 数组中每个边需包含：
               {
                 "display_name": "Language Model",
                 "method": "build_model",
-                "name": "model_output",              
+                "name": "model_output",
                 "selected": "LanguageModel",
                 "types": [
                   "LanguageModel"
@@ -282,7 +285,7 @@ edges 数组中每个边需包含：
                 "name": "api_key",
                 "type": "str",
                 "value": ""
-              },            
+              },
               "input_value": {
                 "_input_type": "MessageInput",
                 "display_name": "Input",
@@ -346,6 +349,1016 @@ edges 数组中每个边需包含：
   "name": "Basic Prompting",
   "tags": [
     "chatbots"
+  ]
+}
+```
+
+## 示例模板2：
+### 示例输入
+用户需求：生成一个「基于AstraDB的RAG系统」的工作流
+### 示例输出
+
+```json
+{
+  "data": {
+    "edges": [
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "ChatInput",
+            "id": "ChatInput-HQigW",
+            "name": "message",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "question",
+            "id": "Prompt-P0p5K",
+            "inputTypes": [
+              "Message",
+              "Text"
+            ],
+            "type": "str"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "parser",
+            "id": "parser-q0Q9L",
+            "name": "parsed_text",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "context",
+            "id": "Prompt-P0p5K",
+            "inputTypes": [
+              "Message",
+              "Text"
+            ],
+            "type": "str"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "File",
+            "id": "File-ixUZI",
+            "name": "message",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "data_inputs",
+            "id": "SplitText-jRjJI",
+            "inputTypes": [
+              "Data",
+              "DataFrame",
+              "Message"
+            ],
+            "type": "other"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "Prompt",
+            "id": "Prompt-P0p5K",
+            "name": "prompt",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_value",
+            "id": "LanguageModelComponent-Athv8",
+            "inputTypes": [
+              "Message"
+            ],
+            "type": "str"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "LanguageModelComponent",
+            "id": "LanguageModelComponent-Athv8",
+            "name": "text_output",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_value",
+            "id": "ChatOutput-g3waQ",
+            "inputTypes": [
+              "Data",
+              "DataFrame",
+              "Message"
+            ],
+            "type": "str"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "SplitText",
+            "id": "SplitText-jRjJI",
+            "name": "dataframe",
+            "output_types": [
+              "DataFrame"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "ingest_data",
+            "id": "AstraDB-CRBTB",
+            "inputTypes": [
+              "Data",
+              "DataFrame"
+            ],
+            "type": "other"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "ChatInput",
+            "id": "ChatInput-HQigW",
+            "name": "message",
+            "output_types": [
+              "Message"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "search_query",
+            "id": "AstraDB-8rYTk",
+            "inputTypes": [
+              "Message"
+            ],
+            "type": "query"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "AstraDB",
+            "id": "AstraDB-8rYTk",
+            "name": "dataframe",
+            "output_types": [
+              "DataFrame"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "input_data",
+            "id": "parser-q0Q9L",
+            "inputTypes": [
+              "DataFrame",
+              "Data"
+            ],
+            "type": "other"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "OpenAIEmbeddings",
+            "id": "OpenAIEmbeddings-g2akH",
+            "name": "embeddings",
+            "output_types": [
+              "Embeddings"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "embedding_model",
+            "id": "AstraDB-CRBTB",
+            "inputTypes": [
+              "Embeddings"
+            ],
+            "type": "other"
+          }
+        }
+      },
+      {
+        "data": {
+          "sourceHandle": {
+            "dataType": "OpenAIEmbeddings",
+            "id": "OpenAIEmbeddings-zXU2p",
+            "name": "embeddings",
+            "output_types": [
+              "Embeddings"
+            ]
+          },
+          "targetHandle": {
+            "fieldName": "embedding_model",
+            "id": "AstraDB-8rYTk",
+            "inputTypes": [
+              "Embeddings"
+            ],
+            "type": "other"
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "data": {
+          "description": "Get chat inputs from the Playground.",
+          "display_name": "Chat Input",
+          "id": "ChatInput-HQigW",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Chat Message",
+                "name": "message",
+                "selected": "Message",
+                "tool_mode": true,
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "input_value": {
+                "display_name": "Input Text",
+                "info": "Message to be passed as input.",
+                "name": "input_value",
+                "type": "str",
+                "value": "What is this document about?"
+              }
+            }
+          },
+          "selected_output": "message",
+          "type": "ChatInput"
+        }
+      },
+      {
+        "data": {
+          "description": "Create a prompt template with dynamic variables.",
+          "display_name": "Prompt",
+          "id": "Prompt-P0p5K",
+          "node": {            
+            "outputs": [
+              {
+                "allows_loop": false,
+                "cache": true,
+                "display_name": "Prompt",
+                "group_outputs": false,
+                "method": "build_prompt",
+                "name": "prompt",
+                "selected": "Message",
+                "tool_mode": true,
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "context": {
+                "display_name": "context",
+                "field_type": "str",
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "input_types": [
+                  "Message",
+                  "Text"
+                ],
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "context",
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "type": "str",
+                "value": ""
+              },
+              "question": {
+                "advanced": false,
+                "display_name": "question",
+                "dynamic": false,
+                "field_type": "str",
+                "fileTypes": [],
+                "file_path": "",
+                "info": "",
+                "input_types": [
+                  "Message",
+                  "Text"
+                ],
+                "list": false,
+                "load_from_db": false,
+                "multiline": true,
+                "name": "question",
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "type": "str",
+                "value": ""
+              },
+              "template": {
+                "display_name": "Template",
+                "info": "",
+                "name": "template",
+                "placeholder": "",
+                "type": "prompt",
+                "value": "{context}\n\n---\n\nGiven the context above, answer the question as best as possible.\n\nQuestion: {question}\n\nAnswer: "
+              }
+            }
+          },
+          "selected_output": "prompt",
+          "type": "Prompt"
+        }
+      },
+      {
+        "data": {
+          "description": "Split text into chunks based on specified criteria.",
+          "display_name": "Split Text",
+          "id": "SplitText-jRjJI",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Chunks",
+                "group_outputs": false,
+                "name": "dataframe",
+                "selected": "DataFrame",
+                "tool_mode": true,
+                "types": [
+                  "DataFrame"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {            
+              "chunk_overlap": {
+                "display_name": "Chunk Overlap",
+                "info": "Number of characters to overlap between chunks.",
+                "name": "chunk_overlap",
+                "type": "int",
+                "value": 200
+              },
+              "chunk_size": {
+                "display_name": "Chunk Size",
+                "info": "The maximum length of each chunk. Text is first split by separator, then chunks are merged up to this size. Individual splits larger than this won't be further divided.",
+                "name": "chunk_size",
+                "type": "int",
+                "value": 1000
+              },
+              "data_inputs": {
+                "display_name": "Input",
+                "info": "The data with texts to split in chunks.",
+                "input_types": [
+                  "Data",
+                  "DataFrame",
+                  "Message"
+                ],
+                "name": "data_inputs",
+                "type": "other",
+                "value": ""
+              },
+              "separator": {
+                "display_name": "Separator",
+                "info": "The character to split on. Use \\n for newline. Examples: \\n\\n for paragraphs, \\n for lines, . for sentences",
+                "input_types": [
+                  "Message"
+                ],
+                "name": "separator",
+                "type": "str",
+                "value": "\n"
+              }
+            }
+          },
+          "selected_output": "chunks",
+          "type": "SplitText"
+        }
+      },
+      {
+        "data": {
+          "description": "Display a chat message in the Playground.",
+          "display_name": "Chat Output",
+          "id": "ChatOutput-g3waQ",
+          "node": {
+            "description": "Display a chat message in the Playground.",
+            "display_name": "Chat Output",
+            "outputs": [
+              {
+                "display_name": "Output Message",
+                "method": "message_response",
+                "name": "message",
+                "selected": "Message",
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "input_value": {
+                "_input_type": "MessageInput",
+                "display_name": "Inputs",
+                "info": "Message to be passed as output.",
+                "input_types": [
+                  "Data",
+                  "DataFrame",
+                  "Message"
+                ],
+                "name": "input_value",
+                "type": "str",
+                "value": ""
+              }
+            },
+          },
+          "type": "ChatOutput"
+        }
+      },
+      {
+        "data": {
+          "id": "OpenAIEmbeddings-zXU2p",
+          "node": {
+            "description": "Generate embeddings using OpenAI models.",
+            "display_name": "OpenAI Embeddings",
+            "outputs": [
+              {
+                "display_name": "Embedding Model",
+                "name": "embeddings",
+                "selected": "Embeddings",
+                "types": [
+                  "Embeddings"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "chunk_size": {
+                "_input_type": "IntInput",
+                "display_name": "Chunk Size",
+                "name": "chunk_size",
+                "type": "int",
+                "value": 1000
+              },
+              "model": {
+                "_input_type": "DropdownInput",
+                "display_name": "Model",
+                "name": "model",
+                "type": "str",
+                "value": "text-embedding-3-small"
+              },
+              "openai_api_key": {
+                "_input_type": "SecretStrInput",
+                "display_name": "OpenAI API Key",
+                "name": "openai_api_key",
+                "password": true,
+                "type": "str",
+                "value": ""
+              }
+            },
+          },
+          "selected_output": "embeddings",
+          "type": "OpenAIEmbeddings"
+        }
+      },
+      {
+        "data": {
+          "id": "OpenAIEmbeddings-g2akH",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Embedding Model",
+                "method": "build_embeddings",
+                "name": "embeddings",
+                "selected": "Embeddings",
+                "types": [
+                  "Embeddings"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "model": {
+                "_input_type": "DropdownInput",
+                "display_name": "Model",
+                "options": [
+                  "text-embedding-3-small",
+                  "text-embedding-3-large",
+                  "text-embedding-ada-002"
+                ],
+                "type": "str",
+                "value": "text-embedding-3-small"
+              },
+              "openai_api_key": {
+                "_input_type": "SecretStrInput",
+                "display_name": "OpenAI API Key",
+                "input_types": [],
+                "name": "openai_api_key",
+                "password": true,
+                "type": "str",
+                "value": ""
+              }
+            }
+          },
+          "selected_output": "embeddings",
+          "type": "OpenAIEmbeddings"
+        }
+      },
+      {
+        "data": {
+          "id": "parser-q0Q9L",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Parsed Text",
+                "method": "parse_combined_text",
+                "name": "parsed_text",
+                "selected": "Message",
+                "tool_mode": true,
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "input_data": {
+                "_input_type": "HandleInput",
+                "display_name": "Data or DataFrame",
+                "info": "Accepts either a DataFrame or a Data object.",
+                "input_types": [
+                  "DataFrame",
+                  "Data"
+                ],
+                "name": "input_data",
+                "type": "other",
+                "value": ""
+              },
+              "mode": {
+                "_input_type": "TabInput",
+                "display_name": "Mode",
+                "info": "Convert into raw string instead of using a template.",
+                "name": "mode",
+                "options": [
+                  "Parser",
+                  "Stringify"
+                ],
+                "type": "tab",
+                "value": "Parser"
+              },
+              "pattern": {
+                "_input_type": "MultilineInput",
+                "display_name": "Template",
+                "info": "Use variables within curly brackets to extract column values for DataFrames or key values for Data.For example: `Name: {Name}, Age: {Age}, Country: {Country}`",
+                "input_types": [
+                  "Message"
+                ],
+                "type": "str",
+                "value": "Text: {text}"
+              }
+            },
+          },
+          "selected_output": "parsed_text",
+          "type": "parser"
+        }
+      },
+      {
+        "data": {
+          "id": "File-ixUZI",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Raw Content",
+                "name": "message",
+                "required_inputs": null,
+                "selected": "Message",
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "advanced_mode": {
+                "_input_type": "BoolInput",
+                "display_name": "Advanced Parser",
+                "type": "bool",
+                "value": false
+              },
+              "markdown": {
+                "_input_type": "BoolInput",
+                "display_name": "Markdown Export",
+                "info": "Export processed documents to Markdown format. Only available when advanced mode is enabled.",              
+                "type": "bool",
+                "value": false
+              }
+            },
+          },
+          "type": "File"
+        }
+      },
+      {
+        "data": {
+          "id": "LanguageModelComponent-Athv8",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Model Response",
+                "name": "text_output",
+                "selected": "Message",
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "display_name": "Language Model",
+                "name": "model_output",
+                "selected": "LanguageModel",
+                "types": [
+                  "LanguageModel"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "api_key": {
+                "_input_type": "SecretStrInput",
+                "info": "Model Provider API key",
+                "name": "api_key",
+                "type": "str",
+                "value": ""
+              },
+              "input_value": {
+                "_input_type": "MessageInput",
+                "info": "The input text to send to the model",
+                "input_types": [
+                  "Message"
+                ],
+                "type": "str",
+                "value": ""
+              },
+              "model_name": {
+                "_input_type": "DropdownInput",
+                "display_name": "Model Name",
+                "info": "Select the model to use",
+                "name": "model_name",
+                "type": "str",
+                "value": "gpt-4o-mini"
+              },
+              "provider": {
+                "_input_type": "DropdownInput",
+                "display_name": "Model Provider",
+                "info": "Select the model provider",
+                "name": "provider",
+                "type": "str",
+                "value": "OpenAI"
+              }
+            },
+          },
+          "selected_output": "text_output",
+          "type": "LanguageModelComponent"
+        }
+      },
+      {
+        "data": {
+          "id": "AstraDB-CRBTB",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Search Results",
+                "name": "search_results",
+                "selected": "Data",
+                "tool_mode": true,
+                "types": [
+                  "Data"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "display_name": "DataFrame",
+                "name": "dataframe",
+                "selected": "DataFrame",
+                "types": [
+                  "DataFrame"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "display_name": "Vector Store Connection",
+                "name": "vectorstoreconnection",
+                "selected": "VectorStore",
+                "types": [
+                  "VectorStore"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "collection_name": {
+                "_input_type": "DropdownInput",
+                "dialog_inputs": {
+                  "fields": {
+                    "data": {
+                      "node": {
+                        "description": "Please allow several seconds for creation to complete.",
+                        "display_name": "Create new collection",
+                        "field_order": [
+                          "01_new_collection_name",
+                          "02_embedding_generation_provider",
+                          "03_embedding_generation_model",
+                          "04_dimension"
+                        ],
+                        "name": "create_collection",
+                        "template": {
+                          "01_new_collection_name": {
+                            "_input_type": "StrInput",
+                            "display_name": "Name",
+                            "info": "Name of the new collection to create in Astra DB.",
+                          },
+                          "02_embedding_generation_provider": {
+                            "_input_type": "DropdownInput",
+                            "display_name": "Embedding generation method",
+                            "helper_text": "To create collections with more embedding provider options, go to <a class=\"underline\" href=\"https://astra.datastax.com/\" target=\" _blank\" rel=\"noopener noreferrer\">your database in Astra DB</a>",
+                            "info": "Provider to use for generating embeddings.",
+                            "name": "embedding_generation_provider",
+                            "type": "str",
+                            "value": ""
+                          },
+                          "03_embedding_generation_model": {
+                            "_input_type": "DropdownInput",
+                            "display_name": "Embedding model",
+                            "info": "Model to use for generating embeddings.",
+                            "name": "embedding_generation_model",
+                            "type": "str",
+                            "value": ""
+                          },
+                          "04_dimension": {
+                            "_input_type": "IntInput",
+                            "display_name": "Dimensions",
+                            "dynamic": false,
+                            "info": "Dimensions of the embeddings to generate.",
+                            "type": "int"
+                          }
+                        }
+                      }
+                    }
+                  },
+                },
+                "display_name": "Collection",
+                "info": "The name of the collection within Astra DB where the vectors will be stored.",
+                "name": "collection_name",
+              },
+              "database_name": {
+                "_input_type": "DropdownInput",
+                "dialog_inputs": {
+                  "fields": {
+                    "data": {
+                      "node": {
+                        "description": "Please allow several minutes for creation to complete.",
+                        "display_name": "Create new database",
+                        "field_order": [
+                          "01_new_database_name",
+                          "02_cloud_provider",
+                          "03_region"
+                        ],
+                        "name": "create_database",
+                        "template": {
+                          "01_new_database_name": {
+                            "_input_type": "StrInput",
+                            "advanced": false,
+                            "display_name": "Name",
+                            "name": "new_database_name",
+                            "type": "str",
+                            "value": ""
+                          },
+                          "02_cloud_provider": {
+                            "_input_type": "DropdownInput",
+                            "name": "cloud_provider",
+                          },
+                          "03_region": {
+                            "_input_type": "DropdownInput",
+                            "info": "Region for the new database.",
+                            "name": "region",
+                          }
+                        }
+                      }
+                    }
+                  },
+                },
+              },
+              "embedding_model": {
+                "_input_type": "HandleInput",
+                "info": "Specify the Embedding Model. Not required for Astra Vectorize collections.",
+                "input_types": [
+                  "Embeddings"
+                ],
+                "name": "embedding_model",
+                "type": "other",
+                "value": ""
+              },
+              "ingest_data": {
+                "_input_type": "HandleInput",
+                "input_types": [
+                  "Data",
+                  "DataFrame"
+                ],
+                "name": "ingest_data",
+                "type": "other",
+                "value": ""
+              },
+              "search_query": {
+                "_input_type": "QueryInput",
+                "info": "Enter a query to run a similarity search.",
+                "input_types": [
+                  "Message"
+                ],
+                "name": "search_query",
+                "placeholder": "Enter a query...",
+                "type": "query",
+                "value": ""
+              },
+              "token": {
+                "_input_type": "SecretStrInput",
+                "info": "Authentication token for accessing Astra DB.",
+                "type": "str",
+                "value": ""
+              }
+            },
+            "tool_mode": false
+          },
+          "selected_output": "search_results",
+          "type": "AstraDB"
+        }
+      },
+      {
+        "data": {
+          "id": "AstraDB-8rYTk",
+          "node": {
+            "description": "Ingest and search documents in Astra DB",
+            "display_name": "Astra DB",
+            "outputs": [
+              {
+                "display_name": "Search Results",
+                "name": "search_results",
+                "types": [
+                  "Data"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "display_name": "DataFrame",
+                "name": "dataframe",
+                "selected": "DataFrame",
+                "types": [
+                  "DataFrame"
+                ],
+                "value": "__UNDEFINED__"
+              },
+              {
+                "display_name": "Vector Store Connection",
+                "name": "vectorstoreconnection",
+                "selected": "VectorStore",
+                "types": [
+                  "VectorStore"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "embedding_model": {
+                "_input_type": "HandleInput",
+                "advanced": false,
+                "display_name": "Embedding Model",
+                "dynamic": false,
+                "info": "Specify the Embedding Model. Not required for Astra Vectorize collections.",
+                "input_types": [
+                  "Embeddings"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "name": "embedding_model",
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "trace_as_metadata": true,
+                "type": "other",
+                "value": ""
+              },
+              "ingest_data": {
+                "_input_type": "HandleInput",
+                "advanced": false,
+                "display_name": "Ingest Data",
+                "dynamic": false,
+                "info": "",
+                "input_types": [
+                  "Data",
+                  "DataFrame"
+                ],
+                "list": true,
+                "list_add_label": "Add More",
+                "name": "ingest_data",
+                "placeholder": "",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "trace_as_metadata": true,
+                "type": "other",
+                "value": ""
+              },
+              "search_query": {
+                "_input_type": "QueryInput",
+                "advanced": false,
+                "display_name": "Search Query",
+                "dynamic": false,
+                "info": "Enter a query to run a similarity search.",
+                "input_types": [
+                  "Message"
+                ],
+                "list": false,
+                "list_add_label": "Add More",
+                "load_from_db": false,
+                "name": "search_query",
+                "placeholder": "Enter a query...",
+                "required": false,
+                "show": true,
+                "title_case": false,
+                "tool_mode": true,
+                "trace_as_input": true,
+                "trace_as_metadata": true,
+                "type": "query",
+                "value": ""
+              },
+              "token": {
+                "_input_type": "SecretStrInput",
+                "display_name": "Astra DB Application Token",
+                "info": "Authentication token for accessing Astra DB.",
+                "name": "token",
+                "type": "str",
+                "value": ""
+              }
+            },
+          },
+          "type": "AstraDB"
+        }
+      },
+      {
+        "data": {
+          "id": "Prompt-cOnwa",
+          "node": {
+            "outputs": [
+              {
+                "display_name": "Prompt",
+                "selected": "Message",
+                "types": [
+                  "Message"
+                ],
+                "value": "__UNDEFINED__"
+              }
+            ],
+            "template": {
+              "template": {
+                "_input_type": "PromptInput",
+                "display_name": "Template",
+                "name": "template",
+                "type": "prompt",
+                "value": ""
+              },
+            },
+          },
+          "type": "Prompt"
+        }
+      }
+    ],
+    "viewport": {
+      "x": -325.9549572321506,
+      "y": -243.2747647587389,
+      "zoom": 0.5586376429937636
+    }
+  },
+  "description": "Load your data for chat context with Retrieval Augmented Generation.",
+  "endpoint_name": null,
+  "id": "e158d7d6-e7f2-49a7-9331-250b5eb3aae2",
+  "is_component": false,
+  "last_tested_version": "1.7.0",
+  "name": "Vector Store RAG",
+  "tags": [
+    "openai",
+    "astradb",
+    "rag",
+    "q-a"
   ]
 }
 ```

@@ -189,6 +189,7 @@ async def session_scope() -> AsyncGenerator[AsyncSession, None]:
 
             # Log detailed information for debugging
             import traceback
+
             tb = traceback.format_exc()
             await logger.aerror(f"Exception in session_scope: {e!s}")
             await logger.adebug(f"Traceback for session_scope exception:\n{tb}")
@@ -205,16 +206,21 @@ async def session_scope() -> AsyncGenerator[AsyncSession, None]:
             # For DB-specific errors, return a clearer HTTP 500 to the client while preserving the original exception as context
             try:
                 import sqlalchemy as sa
+
                 if isinstance(e, sa.exc.SQLAlchemyError):
                     await logger.aexception("Database error occurred during session scope", exception=e)
-                    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Database error during request") from e
+                    raise HTTPException(
+                        status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Database error during request"
+                    ) from e
             except Exception:
                 # If sqlalchemy isn't available or checking fails, continue to re-raise original
                 pass
 
             # Non-HTTP, non-DB exceptions: log fully and re-raise as HTTP 500 with safe message
             await logger.aexception("An unexpected error occurred during the session scope.", exception=e)
-            raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Internal server error during database session") from e
+            raise HTTPException(
+                status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Internal server error during database session"
+            ) from e
 
 
 def get_cache_service() -> CacheService | AsyncBaseCacheService:

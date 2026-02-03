@@ -92,7 +92,9 @@ async def api_key_security(
     except Exception as exc:  # pragma: no cover - defensive
         await logger.aexception("Unexpected error in api_key_security", exception=exc)
         # Return a safe HTTP error to the caller
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Authentication subsystem error") from exc
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Authentication subsystem error"
+        ) from exc
 
     msg = "Invalid result type"
     raise ValueError(msg)

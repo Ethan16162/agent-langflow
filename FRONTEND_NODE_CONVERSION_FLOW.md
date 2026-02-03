@@ -38,16 +38,16 @@ Component.to_frontend_node() 方法执行
 @router.get("/all", dependencies=[Depends(get_current_active_user)])
 async def get_all():
     """Retrieve all component types with compression for better performance.
-    
+
     Returns a compressed response containing all available component types.
     """
     from langflow.interface.components import get_and_cache_all_types_dict
-    
+
     all_types = await get_and_cache_all_types_dict(settings_service=get_settings_service())
     return compress_response(all_types)
 ```
 
-**功能**: 
+**功能**:
 - 获取所有已注册组件
 - 将它们转换成JSON格式
 - 返回压缩的响应给前端
@@ -59,11 +59,11 @@ async def get_all():
 ```python
 def to_frontend_node(self):
     """Convert a Python component to a FrontendNode JSON object."""
-    
+
     # 1. 从Python类中获取模板配置
     field_config = self.get_template_config(self)
     frontend_node = ComponentFrontendNode.from_inputs(**field_config)
-    
+
     # 2. 添加代码字段
     code_field = Input(
         dynamic=True,
@@ -77,21 +77,21 @@ def to_frontend_node(self):
         field_type="code",
     )
     frontend_node.template.add_field(code_field)
-    
+
     # 3. 计算输出类型
     for output in frontend_node.outputs:
         if output.types:
             continue
         return_types = self._get_method_return_type(output.method)
         output.add_types(return_types)
-    
+
     # 4. 验证和优化
     frontend_node.validate_component()
     frontend_node.set_base_classes_from_outputs()
-    
+
     # 5. 转换为字典（JSON）
     node_dict = frontend_node.to_dict(keep_name=False)
-    
+
     # 6. 返回标准格式
     return {
         "data": {
@@ -121,18 +121,18 @@ async def custom_component(
 ) -> CustomComponentResponse:
     # 1. 创建组件实例
     component = Component(_code=raw_code.code)
-    
+
     # 2. 从代码构建模板
     built_frontend_node, component_instance = build_custom_component_template(
         component, user_id=user.id
     )
-    
+
     # 3. 如果提供了当前节点信息，进行更新
     if raw_code.frontend_node is not None:
         built_frontend_node = await component_instance.update_frontend_node(
             built_frontend_node, raw_code.frontend_node
         )
-    
+
     # 4. 处理工具模式
     tool_mode: bool = built_frontend_node.get("tool_mode", False)
     if isinstance(component_instance, Component):
@@ -141,7 +141,7 @@ async def custom_component(
             field_name="tool_mode",
             field_value=tool_mode,
         )
-    
+
     # 5. 返回JSON格式的组件定义
     return CustomComponentResponse(data=built_frontend_node, type=type_)
 ```
@@ -152,22 +152,22 @@ async def custom_component(
 
 ```python
 def build_custom_component_template_from_inputs(
-    custom_component: Component | CustomComponent, 
-    user_id: str | UUID | None = None, 
+    custom_component: Component | CustomComponent,
+    user_id: str | UUID | None = None,
     module_name: str | None = None
 ):
     """从Python组件代码生成FrontendNode模板"""
-    
+
     # 1. 获取组件实例
     cc_instance = get_component_instance(custom_component, user_id=user_id)
-    
+
     # 2. 从输入配置生成前端节点
     field_config = cc_instance.get_template_config(cc_instance)
     frontend_node = ComponentFrontendNode.from_inputs(**field_config)
-    
+
     # 3. 添加代码字段
     frontend_node = add_code_field(frontend_node, custom_component._code)
-    
+
     # 4. 计算返回类型
     for output in frontend_node.outputs:
         if output.types:
@@ -175,19 +175,19 @@ def build_custom_component_template_from_inputs(
         return_types = cc_instance.get_method_return_type(output.method)
         return_types = [format_type(return_type) for return_type in return_types]
         output.add_types(return_types)
-    
+
     # 5. 验证组件
     frontend_node.validate_component()
     frontend_node.set_base_classes_from_outputs()
-    
+
     # 6. 重新排序字段
     reorder_fields(frontend_node, cc_instance._get_field_order())
-    
+
     # 7. 构建元数据
     frontend_node = build_component_metadata(
         frontend_node, cc_instance, module_name, ctype_name
     )
-    
+
     # 8. 返回字典格式
     return frontend_node.to_dict(keep_name=False), cc_instance
 ```
@@ -475,7 +475,7 @@ class ChatInput(Component):
     display_name = "Chat Input"
     description = "Get chat inputs from the Playground."
     icon = "MessagesSquare"
-    
+
     inputs = [
         MultilineInput(
             name="input_value",
@@ -493,7 +493,7 @@ class ChatInput(Component):
         ),
         # ... 更多输入
     ]
-    
+
     outputs = [
         Output(
             display_name="Chat Message",
@@ -501,7 +501,7 @@ class ChatInput(Component):
             method="message_response"
         ),
     ]
-    
+
     async def message_response(self) -> Message:
         # 实现
         pass

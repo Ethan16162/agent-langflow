@@ -1043,5 +1043,48 @@
         ]
       }
     }
+  },
+  {
+    "id": "OpenAIEmbeddings-<Need Edit!>",
+    "data": {
+      "description": "Generate embeddings using OpenAI models.",
+      "display_name": "OpenAI Embeddings",
+      "id": "OpenAIEmbeddings-<Need Edit!>",
+      "selected_output": "<Need Edit!> (匹配\"outputs\"中元素的\"name\"字段)",
+      "type": "OpenAIEmbeddings",
+      "node": {
+        "template": {
+          "model": {
+            "display_name": "Model",
+            "name": "model",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "DropdownInput"
+          },
+          "openai_api_key": {
+            "display_name": "OpenAI API Key",
+            "name": "openai_api_key",
+            "value": "<Need Edit!> (Edit or connected with other nodes' output)",
+            "info": "",
+            "type": "str",
+            "input_types": [],
+            "_input_type": "SecretStrInput"
+          }
+        },
+        "outputs": [
+          {
+            "name": "embeddings",
+            "display_name": "Embedding Model",
+            "types": [
+              "Embeddings"
+            ],
+            "method": "build_embeddings",
+            "selected": "Embeddings"
+          }
+        ]
+      }
+    }
   }
 ]
