@@ -361,7 +361,7 @@ def format_workflow_json(workflow_data: dict[str, Any]) -> dict[str, Any]:
     if n > 0:
         cols = max(1, math.ceil(math.sqrt(n)))
         spacing_x = 640  # 水平间距（原 420，增大避免横向挤在一起）
-        spacing_y = 400   # 垂直间距（原 220，须 >= 节点高 234，否则会上下堆叠）
+        spacing_y = 400  # 垂直间距（原 220，须 >= 节点高 234，否则会上下堆叠）
         base_x = 200
         base_y = 100
         jitter_range_x = spacing_x * 0.25
@@ -489,6 +489,7 @@ async def generate_workflow_with_llm(
     # Get OpenAI API key from settings
     # api_key = settings_service.settings.openai_api_key
     import os
+
     api_key = os.getenv("LLM_API_KEY")
     base_url = os.getenv("LLM_BASE_URL")
     model = os.getenv("LLM_MODEL")
@@ -502,7 +503,7 @@ async def generate_workflow_with_llm(
     try:
         await logger.ainfo("Initializing LLM with Deepseek API...")
         llm = ChatOpenAI(
-            model=model, # "qwen-plus"
+            model=model,  # "qwen-plus"
             openai_api_key=api_key,  # 你的 API Key
             temperature=0,
             max_completion_tokens=32768,
