@@ -2,15 +2,15 @@
   "data": {
     "edges": [
       {
-        "id": "reactflow__edge-ChatInput-7xK9m{œdataTypeœ:œChatInputœ,œidœ:œChatInput-7xK9mœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}-LanguageModelComponent-4vR2p{œfieldNameœ:œinput_valueœ,œidœ:œLanguageModelComponent-4vR2pœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}-51cf4490",
-        "source": "ChatInput-7xK9m",
-        "target": "LanguageModelComponent-4vR2p",
-        "sourceHandle": "{œdataTypeœ:œChatInputœ,œidœ:œChatInput-7xK9mœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}",
-        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œLanguageModelComponent-4vR2pœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "id": "reactflow__edge-ChatInput-7Km9x{œdataTypeœ:œChatInputœ,œidœ:œChatInput-7Km9xœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}-LanguageModelComponent-4RqLz{œfieldNameœ:œinput_valueœ,œidœ:œLanguageModelComponent-4RqLzœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}-7a1b4a0e",
+        "source": "ChatInput-7Km9x",
+        "target": "LanguageModelComponent-4RqLz",
+        "sourceHandle": "{œdataTypeœ:œChatInputœ,œidœ:œChatInput-7Km9xœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}",
+        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œLanguageModelComponent-4RqLzœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "data": {
           "sourceHandle": {
             "dataType": "ChatInput",
-            "id": "ChatInput-7xK9m",
+            "id": "ChatInput-7Km9x",
             "name": "message",
             "output_types": [
               "Message"
@@ -18,7 +18,7 @@
           },
           "targetHandle": {
             "fieldName": "input_value",
-            "id": "LanguageModelComponent-4vR2p",
+            "id": "LanguageModelComponent-4RqLz",
             "inputTypes": [
               "Message"
             ],
@@ -30,15 +30,15 @@
         "className": ""
       },
       {
-        "id": "reactflow__edge-Prompt-8qL5n{œdataTypeœ:œPromptœ,œidœ:œPrompt-8qL5nœ,œnameœ:œpromptœ,œoutput_typesœ:[œMessageœ]}-LanguageModelComponent-4vR2p{œfieldNameœ:œsystem_messageœ,œidœ:œLanguageModelComponent-4vR2pœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}-09465825",
-        "source": "Prompt-8qL5n",
-        "target": "LanguageModelComponent-4vR2p",
-        "sourceHandle": "{œdataTypeœ:œPromptœ,œidœ:œPrompt-8qL5nœ,œnameœ:œpromptœ,œoutput_typesœ:[œMessageœ]}",
-        "targetHandle": "{œfieldNameœ:œsystem_messageœ,œidœ:œLanguageModelComponent-4vR2pœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "id": "reactflow__edge-Prompt-8Fp2v{œdataTypeœ:œPromptœ,œidœ:œPrompt-8Fp2vœ,œnameœ:œpromptœ,œoutput_typesœ:[œMessageœ]}-LanguageModelComponent-4RqLz{œfieldNameœ:œsystem_messageœ,œidœ:œLanguageModelComponent-4RqLzœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}-ebe73ff8",
+        "source": "Prompt-8Fp2v",
+        "target": "LanguageModelComponent-4RqLz",
+        "sourceHandle": "{œdataTypeœ:œPromptœ,œidœ:œPrompt-8Fp2vœ,œnameœ:œpromptœ,œoutput_typesœ:[œMessageœ]}",
+        "targetHandle": "{œfieldNameœ:œsystem_messageœ,œidœ:œLanguageModelComponent-4RqLzœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "data": {
           "sourceHandle": {
             "dataType": "Prompt",
-            "id": "Prompt-8qL5n",
+            "id": "Prompt-8Fp2v",
             "name": "prompt",
             "output_types": [
               "Message"
@@ -46,7 +46,7 @@
           },
           "targetHandle": {
             "fieldName": "system_message",
-            "id": "LanguageModelComponent-4vR2p",
+            "id": "LanguageModelComponent-4RqLz",
             "inputTypes": [
               "Message"
             ],
@@ -58,15 +58,15 @@
         "className": ""
       },
       {
-        "id": "reactflow__edge-LanguageModelComponent-4vR2p{œdataTypeœ:œLanguageModelComponentœ,œidœ:œLanguageModelComponent-4vR2pœ,œnameœ:œtext_outputœ,œoutput_typesœ:[œMessageœ]}-ChatOutput-6wT1c{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-6wT1cœ,œinputTypesœ:[œDataœ,œDataFrameœ,œMessageœ],œtypeœ:œotherœ}-21a58ff9",
-        "source": "LanguageModelComponent-4vR2p",
-        "target": "ChatOutput-6wT1c",
-        "sourceHandle": "{œdataTypeœ:œLanguageModelComponentœ,œidœ:œLanguageModelComponent-4vR2pœ,œnameœ:œtext_outputœ,œoutput_typesœ:[œMessageœ]}",
-        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-6wT1cœ,œinputTypesœ:[œDataœ,œDataFrameœ,œMessageœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-LanguageModelComponent-4RqLz{œdataTypeœ:œLanguageModelComponentœ,œidœ:œLanguageModelComponent-4RqLzœ,œnameœ:œtext_outputœ,œoutput_typesœ:[œMessageœ]}-ChatOutput-5WnBc{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-5WnBcœ,œinputTypesœ:[œDataœ,œDataFrameœ,œMessageœ],œtypeœ:œotherœ}-8a64a5c9",
+        "source": "LanguageModelComponent-4RqLz",
+        "target": "ChatOutput-5WnBc",
+        "sourceHandle": "{œdataTypeœ:œLanguageModelComponentœ,œidœ:œLanguageModelComponent-4RqLzœ,œnameœ:œtext_outputœ,œoutput_typesœ:[œMessageœ]}",
+        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-5WnBcœ,œinputTypesœ:[œDataœ,œDataFrameœ,œMessageœ],œtypeœ:œotherœ}",
         "data": {
           "sourceHandle": {
             "dataType": "LanguageModelComponent",
-            "id": "LanguageModelComponent-4vR2p",
+            "id": "LanguageModelComponent-4RqLz",
             "name": "text_output",
             "output_types": [
               "Message"
@@ -74,7 +74,7 @@
           },
           "targetHandle": {
             "fieldName": "input_value",
-            "id": "ChatOutput-6wT1c",
+            "id": "ChatOutput-5WnBc",
             "inputTypes": [
               "Data",
               "DataFrame",
@@ -90,11 +90,11 @@
     ],
     "nodes": [
       {
-        "id": "ChatInput-7xK9m",
+        "id": "ChatInput-7Km9x",
         "data": {
           "description": "Get chat inputs from the Playground.",
           "display_name": "Chat Input",
-          "id": "ChatInput-7xK9m",
+          "id": "ChatInput-7Km9x",
           "node": {
             "template": {
               "_type": "Component",
@@ -198,7 +198,7 @@
                 "placeholder": "",
                 "show": true,
                 "name": "input_value",
-                "value": "Hello! What are some healthy breakfast options?",
+                "value": "Hello, I'd like to know about healthy meal planning.",
                 "display_name": "Input Text",
                 "advanced": false,
                 "input_types": [],
@@ -368,20 +368,20 @@
         "dragging": false,
         "selected": false,
         "position": {
-          "x": 166.4,
-          "y": 32.0
+          "x": 244.48000000000002,
+          "y": 103.4
         },
         "positionAbsolute": {
-          "x": 166.4,
-          "y": 32.0
+          "x": 244.48000000000002,
+          "y": 103.4
         }
       },
       {
-        "id": "Prompt-8qL5n",
+        "id": "Prompt-8Fp2v",
         "data": {
           "description": "Create a prompt template with dynamic variables.",
           "display_name": "Prompt",
-          "id": "Prompt-8qL5n",
+          "id": "Prompt-8Fp2v",
           "node": {
             "template": {
               "_type": "Component",
@@ -412,7 +412,7 @@
                 "placeholder": "",
                 "show": true,
                 "name": "template",
-                "value": "你是一位专业的健康饮食顾问，具备营养学、运动生理学及临床膳食指导资质。你的任务是以科学、实用、个性化的方式为用户提供健康饮食建议。\n\n请严格遵守以下原则：\n1. **循证优先**：所有建议必须基于中国居民膳食指南（2022）、WHO 或 FDA 等权威机构最新共识，不传播未经验证的饮食谣言。\n2. **个体适配**：主动考虑用户潜在需求（如减脂、增肌、控糖、素食、过敏、孕期等），若信息不足则礼貌询问，不强行假设。\n3. **可执行性强**：提供具体食物示例（含常见替代品）、份量参考（如‘1拳蔬菜’‘1掌蛋白质’）、简易烹饪方式（少油蒸煮优先），避免抽象术语。\n4. **风险提示**：对特殊人群（如糖尿病、肾病、食物过敏者）或极端饮食法（如生酮、断食）明确标注适用前提与禁忌。\n5. **语言友好**：使用温暖、鼓励性语气，避免说教；用中文口语化表达，必要时辅以 emoji（如🥗✅⚠️）提升可读性。\n\n现在，请以健康饮食助手身份开始回应。",
+                "value": "你是一位专业的健康饮食助理，具备营养学、运动生理学及慢性病预防管理知识。你的任务是为用户提供科学、个性化、可执行的饮食建议。\n\n请严格遵守以下原则：\n1. **循证优先**：所有建议必须基于中国居民膳食指南（2022）、WHO 或 NIH 等权威来源，不传播伪科学或流行偏方。\n2. **个体化适配**：主动考虑用户可能的年龄、性别、基础疾病（如糖尿病、高血压、痛风）、食物过敏/不耐受、素食倾向、减脂/增肌目标等；若信息不足，请礼貌询问而非假设。\n3. **实用落地**：提供具体食材示例（含常见替代品）、份量参考（如‘一拳蔬菜’‘一掌蛋白质’）、简易食谱（≤5步）、烹饪技巧（少油少盐方法）及外食/外卖优化建议。\n4. **风险警示**：对高风险行为（如极端节食、代餐滥用、补剂过量）必须明确警示，并建议咨询注册营养师或医生。\n\n当前对话中，请以温暖、鼓励、非评判的语气回应用户问题。",
                 "display_name": "Template",
                 "advanced": false,
                 "dynamic": false,
@@ -507,20 +507,20 @@
         "dragging": false,
         "selected": false,
         "position": {
-          "x": 729.9200000000001,
-          "y": 55.60000000000001
+          "x": 917.12,
+          "y": 134.60000000000002
         },
         "positionAbsolute": {
-          "x": 729.9200000000001,
-          "y": 55.60000000000001
+          "x": 917.12,
+          "y": 134.60000000000002
         }
       },
       {
-        "id": "LanguageModelComponent-4vR2p",
+        "id": "LanguageModelComponent-4RqLz",
         "data": {
           "description": "Runs a language model given a specified provider.",
           "display_name": "Language Model",
-          "id": "LanguageModelComponent-4vR2p",
+          "id": "LanguageModelComponent-4RqLz",
           "node": {
             "template": {
               "_type": "Component",
@@ -936,20 +936,20 @@
         "dragging": false,
         "selected": false,
         "position": {
-          "x": 312.0,
-          "y": 555.2
+          "x": 115.19999999999999,
+          "y": 507.8
         },
         "positionAbsolute": {
-          "x": 312.0,
-          "y": 555.2
+          "x": 115.19999999999999,
+          "y": 507.8
         }
       },
       {
-        "id": "ChatOutput-6wT1c",
+        "id": "ChatOutput-5WnBc",
         "data": {
           "description": "Display a chat message in the Playground.",
           "display_name": "Chat Output",
-          "id": "ChatOutput-6wT1c",
+          "id": "ChatOutput-5WnBc",
           "node": {
             "template": {
               "_type": "Component",
@@ -1228,32 +1228,32 @@
         "dragging": false,
         "selected": false,
         "position": {
-          "x": 970.88,
-          "y": 589.6
+          "x": 783.04,
+          "y": 514.2
         },
         "positionAbsolute": {
-          "x": 970.88,
-          "y": 589.6
+          "x": 783.04,
+          "y": 514.2
         }
       }
     ],
     "viewport": {
       "x": -200,
       "y": -150,
-      "zoom": 1
+      "zoom": 0.8
     }
   },
-  "description": "A health nutrition assistant that provides evidence-based, personalized dietary advice.",
+  "description": "A health nutrition assistant powered by an LLM with domain-specific system prompting.",
   "endpoint_name": null,
   "id": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
   "is_component": false,
   "last_tested_version": "1.7.0",
   "name": "Health Diet Assistant",
   "tags": [
-    "nutrition",
     "health",
-    "chatbot",
-    "diet"
+    "nutrition",
+    "diet",
+    "chatbot"
   ],
   "viewport": {
     "x": 0,

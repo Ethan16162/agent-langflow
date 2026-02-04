@@ -501,7 +501,7 @@ async def generate_workflow_with_llm(
 
     # ==================== 1. Initialize LLM (try primary first, fallback to OpenAI)
     try:
-        await logger.ainfo("Initializing LLM with Deepseek API...")
+        await logger.ainfo("Initializing LLM with OpenAI API...")
         llm = ChatOpenAI(
             model=model,  # "qwen-plus"
             openai_api_key=api_key,  # 你的 API Key
@@ -548,8 +548,8 @@ async def generate_workflow_with_llm(
                 f"Please correct the output and return only a valid workflow JSON object."
             )
             # Also include last response text for context if available
-            if last_response_text:
-                feedback += f"\nPrevious LLM response was:\n{last_response_text}"
+            # if last_response_text:
+            #     feedback += f"\nPrevious LLM response was:\n{last_response_text}"
             messages.append(HumanMessage(content=feedback))
 
         # =========================== 3. Invoke LLM
@@ -668,7 +668,7 @@ async def generate_workflow_with_llm(
         try:
             import os
 
-            output_dir = "/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow"
+            output_dir = "src/backend/base/langflow/agent_workflow"
             file_path = os.path.join(output_dir, "test2.json")
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(workflow_data, f, ensure_ascii=False, indent=2)
@@ -701,7 +701,7 @@ def enrich_workflow_nodes(workflow_data: dict[str, Any]) -> dict[str, Any]:
     Returns:
         dict: 补全后的 workflow_data
     """
-    NODES_JSON_PATH = "/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/Files/nodes_auto.json"
+    NODES_JSON_PATH = "src/backend/base/langflow/agent_workflow/Files/nodes_auto.json"
 
     # 加载完整的节点模板
     nodes_json_path = Path(NODES_JSON_PATH)
@@ -749,7 +749,7 @@ def enrich_workflow_nodes(workflow_data: dict[str, Any]) -> dict[str, Any]:
 
 def normalize_workflow_nodes(
     workflow_data: dict,
-    nodes_json_path: str = "/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/nodes.json",
+    nodes_json_path: str = "src/backend/base/langflow/agent_workflow/nodes.json",
 ) -> dict:
     """使用 nodes.json 作为权威模板，修复 / 补全 LLM 生成的 workflow JSON"""
     # ---------- 1. 加载 nodes.json ----------
