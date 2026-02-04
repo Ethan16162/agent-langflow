@@ -12,7 +12,6 @@ from .hello import HelloComponent
 from .parser2 import ParserComponent2
 from .prompt import RagPromptComponent
 
-
 _dynamic_imports = {
     "ChromaVectorStoreComponent": "chroma",
     "ChromaVectorStoreComponentAgent": "chroma_agent",

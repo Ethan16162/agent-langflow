@@ -354,10 +354,14 @@ def format_workflow_json(workflow_data: dict[str, Any]) -> dict[str, Any]:
 
     # import pdb; pdb.set_trace
     # Layout parameters: grid with spacing and small jitter to avoid exact overlap
+    # cols: 网格列数（约 sqrt(n)），节点按列排布
+    # spacing_x / spacing_y: 相邻节点中心在 x/y 方向的间距（须 >= 节点宽/高，否则会堆叠）
+    # base_x / base_y: 网格左上角起点坐标
+    # jitter_range_x / jitter_range_y: 基于节点 id 的随机偏移范围，避免完全对齐重叠
     if n > 0:
         cols = max(1, math.ceil(math.sqrt(n)))
-        spacing_x = 420
-        spacing_y = 220
+        spacing_x = 640  # 水平间距（原 420，增大避免横向挤在一起）
+        spacing_y = 400   # 垂直间距（原 220，须 >= 节点高 234，否则会上下堆叠）
         base_x = 200
         base_y = 100
         jitter_range_x = spacing_x * 0.25
@@ -484,8 +488,10 @@ async def generate_workflow_with_llm(
 
     # Get OpenAI API key from settings
     # api_key = settings_service.settings.openai_api_key
-    api_key = "sk-6f8e6f1012494df29bff153af1606271"
-    base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    import os
+    api_key = os.getenv("LLM_API_KEY")
+    base_url = os.getenv("LLM_BASE_URL")
+    model = os.getenv("LLM_MODEL")
     if not api_key:
         raise ValueError("OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.")
 
@@ -496,7 +502,7 @@ async def generate_workflow_with_llm(
     try:
         await logger.ainfo("Initializing LLM with Deepseek API...")
         llm = ChatOpenAI(
-            model="qwen-plus",
+            model=model, # "qwen-plus"
             openai_api_key=api_key,  # 你的 API Key
             temperature=0,
             max_completion_tokens=32768,

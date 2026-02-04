@@ -3,7 +3,7 @@ from textwrap import dedent
 from lfx.base.prompts.api_utils import process_prompt_template
 from lfx.custom.custom_component.component import Component
 from lfx.inputs.inputs import DefaultPromptField
-from lfx.io import HandleInput, MessageTextInput, Output, PromptInput
+from lfx.io import MessageTextInput, Output, PromptInput
 from lfx.schema.message import Message
 from lfx.template.utils import update_template_values
 
