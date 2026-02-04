@@ -208,7 +208,7 @@ def save_selected_nodes_to_json(
         tuple: (Path to saved file or None, node_inject list for LLM prompt)
     """
     if save_path is None:
-        save_path = Path("/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/Files")
+        save_path = Path("src/backend/base/langflow/agent_workflow/Files")
     else:
         save_path = Path(save_path)
 
@@ -297,7 +297,7 @@ async def get_all():
         # print(all_types)
         # Return compressed response using our utility function
         # --- 新增：保存 all_types 到指定路径的 JSON 文件 ---
-        save_path = Path("/home/gys/catl/langflow/src/backend/base/langflow/agent_workflow/Files")
+        save_path = Path("src/backend/base/langflow/agent_workflow/Files")
         save_path.mkdir(parents=True, exist_ok=True)  # 确保目录存在
         json_file = save_path / "all_types.json"
 
