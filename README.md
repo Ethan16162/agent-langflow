@@ -1,108 +1,33 @@
-<!-- markdownlint-disable MD030 -->
+# 📋项目概述
+🎯 核心价值：让非技术人员也能通过对话创建复杂的 AI 应用流程
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./docs/static/img/langflow-logo-color-blue-bg.svg">
-  <img src="./docs/static/img/langflow-logo-color-black-solid.svg" alt="Langflow logo">
-</picture>
+传统 Langflow 需要用户手动拖拽节点、配置参数、连接边，本项目在保留原有可视化编辑能力的基础上，引入智能 Copilot Agent，显著降低工作流构建门槛，提升开发效率。
 
-[![Release Notes](https://img.shields.io/github/release/langflow-ai/langflow?style=flat-square)](https://github.com/langflow-ai/langflow/releases)
-[![PyPI - License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/MIT)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/langflow?style=flat-square)](https://pypistats.org/packages/langflow)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/langflow-ai.svg?style=social&label=Follow%20%40Langflow)](https://twitter.com/langflow_ai)
-[![YouTube Channel](https://img.shields.io/youtube/channel/subscribers/UCn2bInQrjdDYKEEmbpwblLQ?label=Subscribe)](https://www.youtube.com/@Langflow)
-[![Discord Server](https://img.shields.io/discord/1116803230643527710?logo=discord&style=social&label=Join)](https://discord.gg/EqksyE2EX9)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/langflow-ai/langflow)
+Agent-Langflow 是一个创新的低代码增强方案，通过集成大语言模型（LLM）Agent，实现 「自然语言描述 → 可执行工作流」 的端到端自动生成。
 
-[Langflow](https://langflow.org) is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers that turn every workflow into a tool that can be integrated into applications built on any framework or stack. Langflow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
+# ✨ 核心功能
+🔹 **智能工作流生成（Copilot Agent）**
+- 自然语言理解：用户用日常语言描述需求（如"创建一个能回答 AI 问题的聊天机器人"），Agent 自动解析意图并生成符合 Langflow 规范的工作流
+- 多轮对话迭代：支持上下文感知的多轮交互，用户可基于生成结果进一步调整优化
+- 自动校验与修复：内置工作流结构校验、节点补全、边规范化机制，确保生成结果可直接运行
 
-## ✨ Highlight features
+🔹 **自定义组件的自动注入**
+- 支持用户自coding组件，并自动提取组件功能注入Agent，可以基于该组件构建workflow
 
-- **Visual builder interface** to quickly get started and iterate.
-- **Source code access** lets you customize any component using Python.
-- **Interactive playground** to immediately test and refine your flows with step-by-step control.
-- **Multi-agent orchestration** with conversation management and retrieval.
-- **Deploy as an API** or export as JSON for Python apps.
-- **Deploy as an MCP server** and turn your flows into tools for MCP clients.
-- **Observability** with LangSmith, LangFuse and other integrations.
-- **Enterprise-ready** security and scalability.
+# 🎬 效果演示
+下面展示两个示例视频，演示运行效果：
 
-## 🖥️  Langflow Desktop
+- 基于Agent构建简单的问答系统：
+<video src="files/Simple Agent.mp4" controls width="600">
+你的浏览器不支持 video 标签，请下载查看：<a href="files/Simple Agent.mp4">Simple Agent</a>
+</video>
 
-Langflow Desktop is the easiest way to get started. It includes dependency management and automatic updates.
-Available for Windows and macOS.
+- 基于Agent构建RAG系统：
+<video src="files/RAG.mp4" controls width="600">
+你的浏览器不支持 video 标签，请下载查看：<a href="files/RAG.mp4">RAG 示例</a>
+</video>
 
-[📥 Download Langflow Desktop](https://www.langflow.org/desktop)
+## 🙏 Acknowledgements
 
-## ⚡️ Quickstart
+本项目基于 [Langflow](https://github.com/langflow-ai/langflow) 框架开发，部署方案请参考 [原仓库文档](https://github.com/langflow-ai/langflow)。
 
-### Install locally (recommended)
-
-Requires Python 3.10–3.13 and [uv](https://docs.astral.sh/uv/getting-started/installation/) (recommended package manager).
-
-#### Install
-
-From a fresh directory, run:
-```shell
-uv pip install langflow -U
-```
-
-The latest Langflow package is installed.
-For more information, see [Install and run the Langflow OSS Python package](https://docs.langflow.org/get-started-installation#install-and-run-the-langflow-oss-python-package).
-
-#### Run
-
-To start Langflow, run:
-```shell
-uv run langflow run
-```
-
-Langflow starts at http://127.0.0.1:7860.
-
-That's it! You're ready to build with Langflow! 🎉
-
-## 📦 Other install options
-
-### Run from source
-If you've cloned this repository and want to contribute, run this command from the repository root:
-```shell
-make run_cli
-```
-For more information, see [DEVELOPMENT.md](./DEVELOPMENT.md).
-
-### Docker
-Start a Langflow container with default settings:
-```shell
-docker run -p 7860:7860 langflowai/langflow:latest
-```
-Langflow is available at http://localhost:7860/.
-For configuration options, see the [Docker deployment guide](https://docs.langflow.org/deployment-docker).
-
-> [!CAUTION]
-> - Langflow versions 1.6.0 through 1.6.3 have a critical bug where `.env` files are not read, potentially causing security vulnerabilities. **DO NOT** upgrade to these versions if you use `.env` files for configuration. Instead, upgrade to 1.6.4, which includes a fix for this bug.
-> - Windows users of Langflow Desktop should **not** use the in-app update feature to upgrade to Langflow version 1.6.0. For upgrade instructions, see [Windows Desktop update issue](https://docs.langflow.org/release-notes#windows-desktop-update-issue).
-> - Users must update to Langflow >= 1.3 to protect against [CVE-2025-3248](https://nvd.nist.gov/vuln/detail/CVE-2025-3248)
-> - Users must update to Langflow >= 1.5.1 to protect against [CVE-2025-57760](https://github.com/langflow-ai/langflow/security/advisories/GHSA-4gv9-mp8m-592r)
->
-> For security information, see our [Security Policy](./SECURITY.md) and [Security Advisories](https://github.com/langflow-ai/langflow/security/advisories).
-
-## 🚀 Deployment
-
-Langflow is completely open source and you can deploy it to all major deployment clouds. To learn how to deploy Langflow, see our [Langflow deployment guides](https://docs.langflow.org/deployment-overview).
-
-## ⭐ Stay up-to-date
-
-Star Langflow on GitHub to be instantly notified of new releases.
-
-![Star Langflow](https://github.com/user-attachments/assets/03168b17-a11d-4b2a-b0f7-c1cce69e5a2c)
-
-## 👋 Contribute
-
-We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Langflow more accessible.
-
----
-
-[![Star History Chart](https://api.star-history.com/svg?repos=langflow-ai/langflow&type=Timeline)](https://star-history.com/#langflow-ai/langflow&Date)
-
-## ❤️ Contributors
-
-[![langflow contributors](https://contrib.rocks/image?repo=langflow-ai/langflow)](https://github.com/langflow-ai/langflow/graphs/contributors)
