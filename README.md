@@ -23,6 +23,9 @@ https://github.com/user-attachments/assets/a8a76373-466e-4620-a6fa-f5eeda1b16d7
 
 - 基于Agent构建RAG系统：
 
+https://github.com/user-attachments/assets/d39df020-3e6f-4b5a-a8b9-59c85aee212f
+
+
 
 
 ## 🙏 Acknowledgements
